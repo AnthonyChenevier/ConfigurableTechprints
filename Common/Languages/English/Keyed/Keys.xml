@@ -9,7 +9,11 @@
     <ViewReport_Button>View debug reports</ViewReport_Button>
     <ViewReport_Tooltip>Select and view various debugging processing reports</ViewReport_Tooltip>
     <DeleteCustomSettings_Tooltip>Delete custom settings</DeleteCustomSettings_Tooltip>
-    <ReportButtonDialog_Message>Report has also been printed to log</ReportButtonDialog_Message>
+    <GeneralTechprintSettings_Tab>Gen. Techprint Settings</GeneralTechprintSettings_Tab>
+    <CustomTechprintsSettings_Tab>Custom Techprints</CustomTechprintsSettings_Tab>
+    <GeneralTraderSettings_Tab>Gen. Trader Settings</GeneralTraderSettings_Tab>
+    <CustomTradersSettings_Tab>Custom Traders</CustomTradersSettings_Tab>
+
     <!-- General techprint settings page -->
     <!--Basic generation settings-->
     <TechLevelsWithTechprints_Label>Generate techprints for projects at tech level:</TechLevelsWithTechprints_Label>
@@ -55,6 +59,7 @@
     <CustomTraders_Note>NOTE: Customizing a trader bypasses any other changes made by this mod (modifiers etc)</CustomTraders_Note>
     <CustomTraderCount_Label>Count: </CustomTraderCount_Label>
     <CustomTraderChance_Label>Chance {%}: </CustomTraderChance_Label>
+    <CustomTraderChance_Tooltip>The maximum chance for all combined entries is limited to 100</CustomTraderChance_Tooltip>
     <CustomTradersAddCountChance_Button>Add new CountChance</CustomTradersAddCountChance_Button>
     <CustomTradersRemoveLastCountChance_Button>Remove last CountChance</CustomTradersRemoveLastCountChance_Button>
     <CustomTradersAddNew_Button>Add new customized trader settings</CustomTradersAddNew_Button>

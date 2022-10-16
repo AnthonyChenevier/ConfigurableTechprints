@@ -1,13 +1,12 @@
 REM ################ Mod build and install script (c) Andreas Pardeike 2020 ################
-REM MODIFIED BY Anthony Chenevier 2020: modified for my personal preferences for solution directory format and install location.
+REM MODIFIED BY Anthony Chenevier 2020-2022: modified for my personal preferences for solution directory format and install location.
 REM Also updated for recent changes to 1.1 & harmony usage, and took out the extra xcopys to a standalone install of rimworld 
-REM (most likely for the debugging mod, might add that back if debugging hooks become viable again)
 REM All credit goes to Andreas Pardeike. Original script at https://gist.github.com/pardeike/08ff826bf40ee60452f02d85e59f32ff
 REM
 REM Call this script from Visual Studio's Build Events post-build event command line box:
-REM "$(ProjectDir)Install.bat" $(ConfigurationName) "$(ProjectDir)" "$(ProjectName)" "About Common v1.1" "LoadFolders.xml"
-REM < 0 this script        >< 1 Release/Debug ><2 location of solution><3 Mod name ><4 folders to copy > <5 files to copy >
-REM 
+REM "$(ProjectDir)Install.bat" "C:\steam\steamapps\common\RimWorld" $(ConfigurationName) "$(ProjectDir)" "$(ProjectName)" "About Common v1.3" "LoadFolders.xml"
+REM < 0 this script            >< 1 Rimworld install location   >< 2 Release/Debug ><3 location of solution><4 Mod name ><5 folders to copy > <6 files to copy >
+REM Take note of the double quotations.
 REM The project structure should look like this: 
 REM Modname
 REM +- .git
@@ -60,7 +59,7 @@ REM
 REM Finally, configure Visual Studio's Debug configuration with the rimworld exe as an external
 REM program and set the working directory to the directory containing the exe.
 REM
-REM To debug, build the project (this script will install the mod), then run "Debug" (F5) which
+REM To debug, build the project (this script will install the mod to the Rimworld mods directory), then run "Debug" (F5) which
 REM will start RimWorld in paused state. Finally, choose "Debug -> Attach Unity Debugger" and
 REM select the rimworld instance
 @ECHO OFF

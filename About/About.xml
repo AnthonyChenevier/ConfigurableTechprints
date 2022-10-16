@@ -1,21 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-  <name>Configurable Techprints</name>
-  <author>MakeItSo</author>
-  <supportedVersions>
-    <li>1.2</li>
-    <li>1.3</li>
-    <li>1.4</li>
-  </supportedVersions>
-  <packageId>com.makeitso.configurabletechprints</packageId>
-  <modDependencies>
+    <name>Configurable Techprints</name>
+    <author>MakeItSo</author>
+    <packageId>com.makeitso.configurabletechprints</packageId>
+    <url>https://github.com/AnthonyChenevier/ConfigurableTechprints</url>
+    <supportedVersions>
+        <li>1.2</li>
+        <li>1.3</li>
+        <li>1.4</li>
+    </supportedVersions>
+    <modDependencies>
     <li>
-      <packageId>brrainz.harmony</packageId>
-      <displayName>Harmony</displayName>
-      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
-      <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+        <packageId>brrainz.harmony</packageId>
+        <displayName>Harmony</displayName>
+        <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+        <downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
     </li>
-  </modDependencies>
-  <description>Make colonies struggle that bit harder by locking their favourite research projects behind techprints, forcing them to trade, quest or raid to get access to all that sweet, sweet new technology (with the added benefit of reduced research cost!). Uses vanilla mechanics and systems (added in Royalty) as much as possible and attempts to balance generated techprint requirements, market prices, factional availabilities and research costs with vanilla values. A settings page is provided where you can change nearly all factors that impact techprint generation, including custom settings for both techprints and traders, allowing a great deal of flexibility in how you want to restrict the progression of technology within your colonies.
-  </description>
+    </modDependencies>
+    <description><![CDATA[<size=20><b>Configurable Techprints</b></size>
+    
+A Rimworld mod to give players the ability to generate techprints for any research and modify their values to customize the gameplay experience.
+
+Do you want to set a hard barrier between industrial technology and more primative tech? Make electricity require 5 techprints and cost 5x the research - you can also prevent it from generating in trader's stock.
+Spaceship ending too easy? Lock off all spacer tech.
+Want to make certain guns or armour upgrades a little harder to come by? A techprint limit on those techs but a lower research cost'll do ya.
+
+Configurable Techprints leverages the exisiting intergration of techprints in vanilla/royalty, using them as valid gifts or quest rewards and showing up in trader's inventories if they were already set up to sell them.
+They can also be used to speed up research if you have extras after unlocking the project, a much more likely event with the number and range of techprints this mod can unlock.
+
+Techprints can be generated for any research project, with price, number and rarity based on the project's research cost, tech level and a number of modifiers that can be changed in the settings.
+Players can choose to auto-generate techprints by tech level this way, set custom techprint values for any project they wish, or any combination of the two.
+
+As adding dozens of techprints to the game can somewhat change the parameters of their possible stock, techprint traders are also handled by this mod and are also customizeable to a smaller extent.
+The settings page allows players to modify trader stock counts to accomodate the techprints that have been generated, or to add techprints to traders and factions who do not stock them by default (including any mod-added traders).
+This can be used just to extend techprint trading to modded factions, or change which faction has access to which techprint on a more finely-tuned basis.
+
+Comes with a heavily documented settings page to give players the information they need to modifiy the techonlogies and traders they wish.
+]]></description>
 </ModMetaData>

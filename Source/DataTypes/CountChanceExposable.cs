@@ -9,21 +9,33 @@
 using RimWorld;
 using Verse;
 
-namespace ConfigurableTechprints.DataTypes
+namespace ConfigurableTechprints.DataTypes;
+
+internal class CountChanceExposable : IExposable
 {
-    internal class CountChanceExposable :IExposable
+    public int count;
+    public float chance;
+
+    public void ExposeData()
     {
-        public int count;
-        public float chance;
+        Scribe_Values.Look(ref count, nameof(count));
+        Scribe_Values.Look(ref chance, nameof(chance));
+    }
 
-        public void ExposeData()
+    //type conversion
+    public static explicit operator CountChanceExposable(CountChance c)
+    {
+        return new()
         {
-            Scribe_Values.Look(ref count, nameof(count));
-            Scribe_Values.Look(ref chance, nameof(chance));
-        }
+            count = c.count, chance = c.chance
+        };
+    }
 
-        //type conversion
-        public static explicit operator CountChanceExposable(CountChance c) => new CountChanceExposable { count = c.count, chance = c.chance };
-        public static implicit operator CountChance(CountChanceExposable ce) => new CountChance { count = ce.count, chance = ce.chance };
+    public static implicit operator CountChance(CountChanceExposable ce)
+    {
+        return new()
+        {
+            count = ce.count, chance = ce.chance
+        };
     }
 }

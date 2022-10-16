@@ -1,4 +1,4 @@
-﻿// EmpireOwnedTechprint.cs
+﻿// NativeTechprint_DefModExtension.cs
 // 
 // Part of ConfigurableTechprints - ConfigurableTechprints
 // 
@@ -8,10 +8,9 @@
 
 using Verse;
 
-namespace ConfigurableTechprints.DataTypes
-{
-    //simple mod extension used to tag research projects with Empire-held techprints
-    //this tag can be processed by our mod's techprint thingSetMaker and stockGenerator
-    //to handle these techprints differently
-    public class NativeTechprint_DefModExtension : DefModExtension { }
-}
+namespace ConfigurableTechprints.DataTypes;
+
+//simple mod extension used to tag research projects with Empire-held techprints
+//this tag can be processed by our mod's techprint thingSetMaker and stockGenerator
+//to handle these techprints differently
+public class NativeTechprint_DefModExtension : DefModExtension { }
