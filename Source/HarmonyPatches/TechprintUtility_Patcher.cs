@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using ConfigurableTechprints.DataTypes;
 using HarmonyLib;
 using RimWorld;
 using UnityEngine;
@@ -32,26 +33,27 @@ namespace ConfigurableTechprints.HarmonyPatches
             result = projectDef.Techprint;
             return true;
         }
-
-        //Changed to take selecting faction tech level into account. If the research project
-        //is above or below the faction's tech level then make this techprint less likely to
-        //spawn. If the research project is native then make it more common as well (configurable)
+        
         public static float GetFactionSpecificSelectionWeight(ResearchProjectDef project, Faction faction = null)
         {
             //no faction means this is probably a ThingSetMaker asking. just in case more work needs to be done here.
             //just use vanilla behaviour for now
-            float baseCommonality = project.techprintCommonality * (project.PrerequisitesCompleted ? 1f : 0.02f);
+
+            float ifNativeModifier = project.HasModExtension<NativeTechprint_DefModExtension>() 
+                                         ? ConfigurableTechprintsMod.Instance.Settings.NativeCommonalityMultiplier 
+                                         : 1f;
+            float baseCommonality = project.techprintCommonality * ifNativeModifier * (project.PrerequisitesCompleted ? 1f : 0.02f);
             if (faction == null)
                 return baseCommonality;
 
             int techDifference = Math.Abs((int)project.techLevel - (int)faction.def.techLevel);
             //give projects at our tech level a set commonality (configurable),
             //otherwise make projects less common per level of difference (configurable)
-            float commonalityMultiplier = techDifference == 0
-                                              ? ConfigurableTechprintsMod.Instance.Settings.TechEqualCommonalityMultiplier
-                                              : 1f - techDifference * ConfigurableTechprintsMod.Instance.Settings.TechDifferenceCommonalityMultiplier;
+            float factionTechModifier = techDifference == 0
+                                            ? ConfigurableTechprintsMod.Instance.Settings.TechEqualCommonalityMultiplier
+                                            : 1f - techDifference * ConfigurableTechprintsMod.Instance.Settings.TechDifferenceCommonalityMultiplier;
 
-            return baseCommonality * commonalityMultiplier;
+            return baseCommonality * factionTechModifier;
         }
     }
 }

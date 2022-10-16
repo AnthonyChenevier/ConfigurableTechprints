@@ -20,7 +20,8 @@ namespace ConfigurableTechprints.HarmonyPatches
             ConfigurableTechprintsMod mod = ConfigurableTechprintsMod.Instance;
             ConfigurableTechprintsSettings modSettings = mod.Settings;
 
-            //backing up original data so we can use it for resetting
+            //backing up original data so we can use it for recognizing default values and resetting changes to settings
+            Log.Message("ConfigurableTechprintsMod :: Backing up pre-modification values...");
             mod.BackupTraderData();
             mod.BackupTechprintData();
             
@@ -28,16 +29,14 @@ namespace ConfigurableTechprints.HarmonyPatches
             Log.Message("ConfigurableTechprintsMod :: Processing traders...");
             List<string> ignoredTraders = modSettings.IgnoredTraders;
             Dictionary<string, TraderData> customTraders = modSettings.CustomTraders;
-            //look for ignored traders and report
             if (ignoredTraders.Count > 0)
             {
-                string ignoredTradersString = string.Join("\n\t- ", ignoredTraders);
-                Log.Message($"ConfigurableTechprintsMod :: Found {ignoredTraders.Count} 'ignore trader' entries. The following traders will not be processed:{ignoredTradersString}");
+                Log.Message($"ConfigurableTechprintsMod :: Found {ignoredTraders.Count} 'ignore trader' entries. The following traders will not be processed by this mod:{string.Join("\n\t- ", ignoredTraders)}");
             }
-
-            //process custom trader entries
+            
             if (customTraders.Count > 0)
             {
+                string customTradersReport = "";
                 foreach (KeyValuePair<string, TraderData> pair in customTraders)
                 {
                     if (ignoredTraders.Contains(pair.Key))
@@ -52,26 +51,33 @@ namespace ConfigurableTechprints.HarmonyPatches
                         Log.Error($"ConfigurableTechprintsMod :: Found custom settings for TraderKindDef ({pair.Key}), but couldn't find the matching TraderKindDef. Skipping.");
                         continue;
                     }
-
-                    
-                    TraderKindDefProcessor.ProcessCustomTrader(traderKindDef, pair.Value);
+                    string report = TraderKindDefProcessor.ProcessCustomTrader(traderKindDef, pair.Value);
+                    customTradersReport += $"\n{report}";
                 }
+                Log.Message($"ConfigurableTechprintsMod :: Processed {customTraders.Count} TraderKindDefs with custom settings. Reports can be found in mod settings.");
+                mod.Reports["CustomTraders"] = customTradersReport;
             }
-            Log.Message($"ConfigurableTechprintsMod :: Processed {customTraders.Count} TraderKindDefs with custom settings.");
+            else
+            {
+                Log.Message($"ConfigurableTechprintsMod :: No TraderKindDefs with custom settings found.");
+                mod.Reports["CustomTraders"] = "None processed";
+            }
 
 
             //filter for traders to those who aren't ignored or custom and have a techprint stock generator
             List<TraderKindDef> techprintTraders =
                 DefDatabase<TraderKindDef>.AllDefs.Where(t => t.stockGenerators.Any(m => m is StockGenerator_Techprints) && 
                                                               !(ignoredTraders.Contains(t.defName) || customTraders.ContainsKey(t.defName))).ToList();
+            string processedTradersReport = "";
             //process all other applicable techprint traders with default settings
             foreach (TraderKindDef trader in techprintTraders)
             {
-
-                TraderKindDefProcessor.ProcessTechprintTrader(trader, modSettings.TraderStockCountMultiplier, modSettings.ExtraProjectCountMultiplier);
+                string report = TraderKindDefProcessor.ProcessTechprintTrader(trader, modSettings.TraderStockCountMultiplier);
+                processedTradersReport += $"\n{report}";
             }
 
-            Log.Message($"ConfigurableTechprintsMod :: Processed {techprintTraders.Count} TraderKindDefs with default settings.");
+            Log.Message($"ConfigurableTechprintsMod :: Processed {techprintTraders.Count} TraderKindDefs. Reports can be found in mod settings. ");
+            mod.Reports["ProcessedTraders"] = processedTradersReport;
 
 
             //techprint modifications
@@ -104,10 +110,11 @@ namespace ConfigurableTechprints.HarmonyPatches
                 }
             }
             
-            //process custom techprints
+            //process customized techprints
             Dictionary<string, TechprintData> customTechprints = modSettings.CustomTechprints;
             if (customTechprints.Count > 0)
             {
+                string customTechprintsReport = "";
                 foreach (KeyValuePair<string, TechprintData> pair in customTechprints)
                 {
                     ResearchProjectDef researchProjectDef = DefDatabase<ResearchProjectDef>.GetNamed(pair.Key);
@@ -117,36 +124,31 @@ namespace ConfigurableTechprints.HarmonyPatches
                         continue;
                     }
 
-                    ResearchProjectDefProcessor.ProcessCustomTechprint(researchProjectDef, pair.Value);
+                    string report = ResearchProjectDefProcessor.ProcessCustomTechprint(researchProjectDef, pair.Value);
+                    customTechprintsReport += $"\n{report}";
                 }
+                Log.Message($"ConfigurableTechprintsMod :: Processed {customTechprints.Count} ResearchProjectDefs with custom settings. Reports can be found in mod settings. ");
+                mod.Reports["CustomProjects"] = customTechprintsReport;
             }
-            Log.Message($"ConfigurableTechprintsMod :: Processed {customTechprints.Count} ResearchProjectDefs with custom settings.");
-
-
-            //filter all non-custom projects.
-            List<ResearchProjectDef> projectDefs = DefDatabase<ResearchProjectDef>.AllDefs.Where(p=> !customTechprints.ContainsKey(p.defName)).ToList();
-
-            //filter and process native techprints - ones added by Royalty or other mods via XML defs.
-            //Empire implant techs, as well as jumppacks and Empire cataphract armour are the only
-            //research projects that require techprints natively and come with defined values. We have
-            //to modify their commonality with a multiplier (customizable in settings) to balance them
-            //with the number of new techprint definitions
-            List<ResearchProjectDef> projectDefsWithNativeTechprints = projectDefs.Where(p => p.HasModExtension<NativeTechprint_DefModExtension>()).ToList();
-            foreach (ResearchProjectDef projectDef in projectDefsWithNativeTechprints)
+            else
             {
-                ResearchProjectDefProcessor.ProcessNativeTechprint(projectDef, modSettings.NativeCommonalityMultiplier);
+                Log.Message($"ConfigurableTechprintsMod :: No ResearchProjectDefs with custom settings found.");
+                mod.Reports["CustomProjects"] = "None processed";
             }
-            Log.Message($"ConfigurableTechprintsMod :: Processed {projectDefsWithNativeTechprints.Count} ResearchProjectDefs with native techprints.");
 
-
+            //filter all non-custom, non-native 
+            List<ResearchProjectDef> projectsRequiringTechprints = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => !p.HasModExtension<NativeTechprint_DefModExtension>() &&
+                                                                                                                      !customTechprints.ContainsKey(p.defName) &&
+                                                                                                                      modSettings.TechLevelsWithTechprints[p.techLevel]).ToList();
+            string generatedTechprintsReport = "";
             //generate techprints from settings
-            List<ResearchProjectDef> projectsRequiringTechprints = projectDefs.Where(p => !p.HasModExtension<NativeTechprint_DefModExtension>() &&
-                                                                                          modSettings.TechLevelsWithTechprints[p.techLevel]).ToList();
             foreach (ResearchProjectDef projectDef in projectsRequiringTechprints)
             {
-                ResearchProjectDefProcessor.ProcessGeneratedTechprint(projectDef, factionTagsByTechLevel[projectDef.techLevel], modSettings);
+                string report = ResearchProjectDefProcessor.ProcessGeneratedTechprint(projectDef, factionTagsByTechLevel[projectDef.techLevel], modSettings);
+                generatedTechprintsReport += report;
             }
-            Log.Message($"ConfigurableTechprintsMod :: Processed {projectsRequiringTechprints.Count} ResearchProjectDefs with default settings.");
+            Log.Message($"ConfigurableTechprintsMod :: Processed {projectsRequiringTechprints.Count} ResearchProjectDefs with default settings. Reports can be found in mod settings. ");
+            mod.Reports["ProcessedProjects"] = generatedTechprintsReport;
         }
     }
 }

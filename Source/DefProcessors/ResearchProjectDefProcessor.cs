@@ -15,7 +15,7 @@ namespace ConfigurableTechprints.DefProcessors
 {
     public static class ResearchProjectDefProcessor
     {
-        public static void ProcessCustomTechprint(ResearchProjectDef projectDef, TechprintData customData)
+        public static string ProcessCustomTechprint(ResearchProjectDef projectDef, TechprintData customData)
         {
             int newTechprintCount = customData.techprintCount;
             float newProjectBaseCost = customData.baseCost;
@@ -23,24 +23,13 @@ namespace ConfigurableTechprints.DefProcessors
             float newTechprintCommonality = customData.techprintCommonality;
             List<string> newHeldByFactionCategoryTags = customData.heldByFactionCategoryTags;
 
-            string report = ApplyTechprintSettingsToProjectDef(projectDef, newProjectBaseCost, newTechprintCount, newTechprintMarketValue, newTechprintCommonality, newHeldByFactionCategoryTags);
+            string report = ApplyTechprintSettingsAndReport(projectDef, newProjectBaseCost, newTechprintCount, newTechprintMarketValue, newTechprintCommonality, newHeldByFactionCategoryTags);
 
 
-            Log.Message($"ConfigurableTechprintsMod :: ResearchProjectDef ({projectDef.defName}) custom data processing report:{report}");
+           return $"\n\t- ResearchProjectDef ({projectDef.defName}) custom data processing report:{report}";
         }
 
-        public static void ProcessNativeTechprint(ResearchProjectDef projectDef, float nativeCommonalityMultiplier)
-        {
-            Log.Message($"ConfigurableTechprintsMod :: ResearchProjectDef ({projectDef.defName}) with native techprint report:" +
-                      $"\n\tModified commonality values:" +
-                      $"\n\tOld value: {projectDef.techprintCommonality}" +
-                      $"\n\tNew value: {projectDef.techprintCommonality * nativeCommonalityMultiplier}");
-            //We don't want to hide native techprints from traders with the giant amount of techprints
-            //added by this mod, so apply a multiplier to their commonality (configurable, natively 2x)
-            projectDef.techprintCommonality *= nativeCommonalityMultiplier;
-        }
-
-        public static void ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, ConfigurableTechprintsSettings modSettings)
+        public static string ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, ConfigurableTechprintsSettings modSettings)
         {
             int newTechprintCount = CalcTechprintCount(projectDef.baseCost, modSettings.TechprintPerResearchPoints);
             float newProjectBaseCost = CalcBaseCost(projectDef.baseCost, newTechprintCount, modSettings.ResearchBaseCostMultiplier);
@@ -48,10 +37,10 @@ namespace ConfigurableTechprints.DefProcessors
             float newTechprintCommonality = CalcTechprintCommonality(modSettings.BaseCommonality);
             List<string> newHeldByFactionCategoryTags = factionCategoryTagsForTechLevel;
 
-            string report = ApplyTechprintSettingsToProjectDef(projectDef, newProjectBaseCost, newTechprintCount, newTechprintMarketValue, newTechprintCommonality, newHeldByFactionCategoryTags);
+            string report = ApplyTechprintSettingsAndReport(projectDef, newProjectBaseCost, newTechprintCount, newTechprintMarketValue, newTechprintCommonality, newHeldByFactionCategoryTags);
             
 
-            Log.Message($"ConfigurableTechprintsMod :: ResearchProjectDef ({projectDef.defName}) generated techprint processing report:{report}");
+            return $"\n\t- ResearchProjectDef ({projectDef.defName}) generated techprint processing report:{report}";
         }
 
         /// <summary>
@@ -90,7 +79,7 @@ namespace ConfigurableTechprints.DefProcessors
         /// <returns></returns>
         private static int CalcTechprintCount(float defaultBaseCost, int techprintPerResearchPoints)
         {
-            return 1 + (int)(defaultBaseCost) / techprintPerResearchPoints;
+            return 1 + (int)defaultBaseCost / techprintPerResearchPoints;
         }
 
         /// <summary>
@@ -120,15 +109,18 @@ namespace ConfigurableTechprints.DefProcessors
         /// <param name="newTechprintMarketValue"></param>
         /// <param name="newTechprintCommonality"></param>
         /// <param name="newHeldByFactionCategoryTags"></param>
-        private static string ApplyTechprintSettingsToProjectDef(ResearchProjectDef projectDef, float newBaseCost, int newTechprintCount, float newTechprintMarketValue,
+        private static string ApplyTechprintSettingsAndReport(ResearchProjectDef projectDef, float newBaseCost, int newTechprintCount, float newTechprintMarketValue,
                                                                  float newTechprintCommonality, List<string> newHeldByFactionCategoryTags)
         {
             //we build and return a report to be shown later
-            string oldValuesString = $"baseCost = {projectDef.baseCost}; " +
-                                     $"techprintCount = {projectDef.techprintCount}; " +
-                                     $"techPrintMarketValue = {projectDef.techprintMarketValue}; " +
-                                     $"techprintCommonality = {projectDef.techprintCommonality}, " +
-                                     $"heldByFactionCategoryTags = {(projectDef.heldByFactionCategoryTags != null ? string.Join(", ", projectDef.heldByFactionCategoryTags) : "NONE")};";
+            string[] oldValuesString =
+            {
+                $"{projectDef.baseCost}",
+                $"{projectDef.techprintCount}",
+                $"{projectDef.techprintMarketValue}",
+                $"{projectDef.techprintCommonality}",
+                $"{(projectDef.heldByFactionCategoryTags != null ? string.Join(", ", projectDef.heldByFactionCategoryTags) : "NONE")}"
+            };
 
             projectDef.baseCost = newBaseCost;
             projectDef.techprintCount = newTechprintCount;
@@ -138,15 +130,21 @@ namespace ConfigurableTechprints.DefProcessors
 
             projectDef.heldByFactionCategoryTags = newHeldByFactionCategoryTags;
 
-            string newValuesString = $"baseCost = {projectDef.baseCost}; " +
-                                     $"techprintCount = {projectDef.techprintCount}; " +
-                                     $"techPrintMarketValue = {projectDef.techprintMarketValue}; " +
-                                     $"techprintCommonality = {projectDef.techprintCommonality}, " +
-                                     $"heldByFactionCategoryTags = {(projectDef.heldByFactionCategoryTags != null ? string.Join(", ", projectDef.heldByFactionCategoryTags) : "NONE")};";
+            string[] newValuesString =
+            {
+                $"{projectDef.baseCost}",
+                $"{projectDef.techprintCount}",
+                $"{projectDef.techprintMarketValue}",
+                $"{projectDef.techprintCommonality}",
+                $"{(projectDef.heldByFactionCategoryTags != null ? string.Join(", ", projectDef.heldByFactionCategoryTags) : "NONE")}"
+            };
 
-            return $"\n\tApplied techprint settings:" +
-                   $"\n\tOld values: {oldValuesString}" +
-                   $"\n\tNew values: {newValuesString}";
+            return $"\n{" ", 30}{"old values", 20}{"new values", 20}" +
+                   $"\n{"baseCost",30}{oldValuesString[0],20}{newValuesString[0], 20}" +
+                   $"\n{"techprintCount",30}{oldValuesString[1],20}{newValuesString[1],20}" +
+                   $"\n{"techPrintMarketValue",30}{oldValuesString[2],20}{newValuesString[2],20}" +
+                   $"\n{"techprintCommonality",30}{oldValuesString[3],20}{newValuesString[3],20}" +
+                   $"\n{"heldByFactionCategoryTags",30}{oldValuesString[4],20}{newValuesString[4],20}";
         }
     }
 }

@@ -6,16 +6,27 @@ using Verse.Sound;
 namespace ConfigurableTechprints.SettingsPage {
     internal static class ListingHelper
     {
+        /// <summary>
+        /// Wrapper for setting up a basic scroll view. The returned Listing_Standard is limited to one column
+        /// to make it possible to set up a dynamic height for the content rect. If multiple columns are required,
+        /// create an inner listing and use that for layout.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="viewRect"></param>
+        /// <param name="contentHeight"></param>
+        /// <param name="scrollPosition"></param>
+        /// <returns></returns>
         public static Listing_Standard BeginScrollView(this Listing_Standard list, Rect viewRect, float contentHeight, ref Vector2 scrollPosition)
         {
             //set up scrolling environment
-            Rect innerContentRect = new Rect(0f, 0f, viewRect.width - 16f, contentHeight);
+            Rect innerContentRect = new Rect(0f, 0f, viewRect.width - 20f, contentHeight);
+            Rect viewBoundaryRect = new Rect(0f,0f, viewRect.width - 20f, viewRect.height);
+
             Widgets.BeginScrollView(viewRect, ref scrollPosition, innerContentRect);
 
-            viewRect.width -= 20f;//reduce inner width for scrollbar + buffer
             Vector2 position = scrollPosition;
-            Listing_Standard scrollList = new Listing_Standard(viewRect, () => position);
-            scrollList.maxOneColumn = true; //restricted to prevent the listing 
+            //the content listing can't wrap, make an inner listing if you want that.
+            Listing_Standard scrollList = new Listing_Standard(viewBoundaryRect, () => position) { maxOneColumn = true };
             scrollList.Begin(innerContentRect);
 
             return scrollList;
@@ -24,6 +35,32 @@ namespace ConfigurableTechprints.SettingsPage {
         {
             scrollList.End();
             Widgets.EndScrollView();
+        }
+
+
+        public static void CheckboxLabeled(this Listing_Standard list, string label, ref bool checkOn, string tooltip, bool tooltipCoversButtonOnly)
+        {
+            if (tooltipCoversButtonOnly)
+            {
+                Rect fullRect = list.GetRect(Text.LineHeight);
+                Widgets.Label(fullRect.LeftPart(0.9f), label);
+
+                Rect rect = fullRect.RightPartPixels(24f); //all we need for the checkbox
+                if (!list.BoundingRectCached.HasValue || rect.Overlaps(list.BoundingRectCached.Value))
+                {
+                    if (!tooltip.NullOrEmpty())
+                    {
+                        if (Mouse.IsOver(rect))
+                            Widgets.DrawHighlight(rect);
+                        TooltipHandler.TipRegion(rect, (TipSignal)tooltip);
+                    }
+
+                    Widgets.Checkbox(rect.x, rect.y, ref checkOn);
+                }
+
+                list.Gap(list.verticalSpacing);
+            }
+            else list.CheckboxLabeled(label, ref checkOn, tooltip);
         }
 
 

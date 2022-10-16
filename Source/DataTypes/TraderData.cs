@@ -22,7 +22,7 @@ namespace ConfigurableTechprints.DataTypes
         public void ExposeData()
         {
             Scribe_Values.Look(ref HasTechprintGeneratorNatively, nameof(HasTechprintGeneratorNatively));
-            List<CountChanceExposable> countChancesE = CountChances.Select(cc => (CountChanceExposable)cc).ToList();
+            List<CountChanceExposable> countChancesE = CountChances?.Select(cc => (CountChanceExposable)cc).ToList();
             Scribe_Collections.Look(ref countChancesE, nameof(CountChances), LookMode.Deep);
             CountChances = countChancesE.Select(cce => (CountChance)cce).ToList();
         }

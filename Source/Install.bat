@@ -12,79 +12,76 @@ REM The project structure should look like this:
 REM Modname
 REM +- .git
 REM +- .vs
+REM +- About
+REM |	+- About.xml
+REM |	+- Preview.png
+REM |	+- PublishedFileId.txt
+REM +- Assemblies                      <----- this is for RW1.0 + Harmony 1 (if supported)
+REM |	+- 0Harmony.dll
+REM |	+- 0Harmony.dll.mbd
+REM |	+- 0Harmony.pdb
+REM |	+- Modname.dll
+REM |	+- Modname.dll.mbd
+REM |	+- Modname.pdb
+REM +- Common
+REM |	+- Defs
+REM |	+- Languages
+REM |	|	+- English
+REM |	|		+- Keyed
+REM |	|			+- Keys.xml
+REM |	+- Patches
+REM |	+- Textures
 REM +- Source
-REM |	+- packages
-REM |	|	+- Lib.Harmony.2.x.x
 REM |	+- .vs
 REM |	+- obj
 REM |	|  +- Debug
 REM |	|  +- Release
+REM |	+- packages
+REM |	|	+- Lib.Harmony.2.x.x
 REM |	+- Properties
 REM |	+- Modname.csproj
 REM |	+- Modname.csproj.user
 REM |	+- packages.config
+REM |	+- Modname.sln
 REM |	+- Install.bat                  <----- this script
-REM |	+- Staging
-REM |		+- About
-REM |		|  +- About.xml
-REM |		|  +- Preview.png
-REM |		|  +- PublishedFileId.txt
-REM |		+- Assemblies                      <----- this is for RW1.0 + Harmony 1
-REM |		|  +- 0Harmony.dll
-REM |		|  +- 0Harmony.dll.mbd
-REM |		|  +- 0Harmony.pdb
-REM |		|  +- Modname.dll
-REM |		|  +- Modname.dll.mbd
-REM |		|  +- Modname.pdb
-REM |		+- Languages
-REM |		|  +- English
-REM |		|  		+- Modname.pdb
-REM |		+- Textures
-REM |		+- v1.1
-REM |		|  +- Assemblies                   <----- this is for RW1.1 + Harmony 2
-REM |		|     +- 0Harmony.dll
-REM |		|     +- 0Harmony.dll.mbd
-REM |		|     +- 0Harmony.pdb
-REM |		|     +- Modname.dll
-REM |		|     +- Modname.dll.mbd
-REM |		|     +- Modname.pdb
-REM |		+- LoadFolders.xml
+REM +- v1.1
+REM |	+- Assemblies                   <----- this is for RW1.1 + Harmony 2 (if supported). Other supported rimworld versions should follow the same convention (v1.2, v1.3, v1.4)
+REM |		+- 0Harmony.dll				<----- the actual harmony dll does not have to be included for release
+REM |		+- 0Harmony.pdb
+REM |		+- Modname.dll
+REM |		+- Modname.pdb
 REM +- .gitattributes
 REM +- .gitignore
-REM +- LICENSE
+REM +- LICENSE.txt
+REM +- LoadFolders.xml
 REM +- README.md
-REM +- Modname.sln
-REM
-REM Also needed are the following environment variables in the system settings (example values):
-REM
-REM RIMWORLD_DIR_STEAM = C:\Program Files (x86)\Steam\steamapps\common\RimWorld
+REM +- Modname.zip
 REM
 REM Finally, configure Visual Studio's Debug configuration with the rimworld exe as an external
 REM program and set the working directory to the directory containing the exe.
 REM
 REM To debug, build the project (this script will install the mod), then run "Debug" (F5) which
 REM will start RimWorld in paused state. Finally, choose "Debug -> Attach Unity Debugger" and
-REM press "Input IP" and accept the default 127.0.0.1 : 56000
+REM select the rimworld instance
 @ECHO OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-SET RIMWORLD_DIR=%RIMWORLD_DIR_STEAM%
+SET OUTPUT_DIR=%~1
+SET BUILD_CONFIGURATION=%2
+SET SOLUTION_DIR=%~3
+SET MOD_NAME=%~4
+SET FOLDERS_TO_COPY=%~5
+SET FILES_TO_COPY=%~6
 
-SET BUILD_CONFIGURATION=%1
-SET SOLUTION_DIR=%~2
-SET MOD_NAME=%~3
-SET FOLDERS_TO_COPY=%~4
-SET FILES_TO_COPY=%~5
+FOR %%G IN (%FOLDERS_TO_COPY%) DO (SET LAST_FOLDER=%%G)
 
-SET MOD_DIR=%SOLUTION_DIR:~0,-8%\Staging
+SET MOD_DIR=%SOLUTION_DIR:~0,-8%
 
-SET ZIP_FILE=%SOLUTION_DIR:~0,-8%\%MOD_NAME%
+SET ZIP_FILE=%MOD_DIR%\%MOD_NAME%.zip
 
-SET TARGET_DIR=%RIMWORLD_DIR%\Mods\%MOD_NAME%
+SET TARGET_DIR=%OUTPUT_DIR%\Mods\%MOD_NAME%
 
-
-FOR %%G IN (FOLDERS_TO_COPY) DO ( SET LAST_FOLDER=%%G )
-SET MOD_DLL_PATH=%MOD_DIR%\%LAST_FOLDER%\Assemblies\%MOD_NAME%.dll
+SET MOD_DLL_PATH=%MOD_DIR%\%LAST_FOLDER%\Assemblies
 
 SET ZIP_EXE="C:\Program Files\7-Zip\7z.exe"
 
@@ -93,21 +90,8 @@ SET ZIP_EXE="C:\Program Files\7-Zip\7z.exe"
 ECHO Running post-build script:
 ECHO ==========================
 
-IF %BUILD_CONFIGURATION%==Debug (
-	IF EXIST "%MOD_DLL_PATH:~0,-4%.pdb" (
-		ECHO Creating mdb at '%MOD_DLL_PATH%'
-		"%PDB2MDB_PATH%" "%MOD_DLL_PATH%"
-	)
-)
 
-IF %BUILD_CONFIGURATION%==Release (
-	IF EXIST "%MOD_DLL_PATH%.mdb" (
-		ECHO "Deleting %MOD_DLL_PATH%.mdb"
-		DEL "%MOD_DLL_PATH%.mdb"
-	)
-)
-
-IF EXIST "%RIMWORLD_DIR%" (
+IF EXIST "%OUTPUT_DIR%" (
 	IF "%TARGET_DIR%" == "%SOLUTION_DIR%" (
 		ECHO Solution and mod target directory match. Skipping copy operation.
 	) ELSE (
@@ -115,35 +99,38 @@ IF EXIST "%RIMWORLD_DIR%" (
 		IF NOT EXIST "%TARGET_DIR%" (
 			MKDIR "%TARGET_DIR%"
 		) ELSE (
-			ECHO WARNING-'%TARGET_DIR%' already exists. Old files will not be automatically deleted. Make sure no unused files are still there.
+			ECHO WARNING-'%TARGET_DIR%' already exists. Old files will be automatically deleted.
+			DEL /S /Q "%TARGET_DIR%"
 		)
 
-		FOR %%G IN (FOLDERS_TO_COPY) DO (
-			SETLOCAL FOLDER=%%G
-			ECHO Copying folder '%MOD_DIR%\%FOLDER%' to '%TARGET_DIR%\%FOLDER%'
-			XCOPY /I /Y /E "%MOD_DIR%\%FOLDER%" "%TARGET_DIR%\%FOLDER%"
+		FOR %%G IN (%FOLDERS_TO_COPY%) DO (
+			SET FOLDER=%%G
+			ECHO Copying folder '%MOD_DIR%\!FOLDER!' to '%TARGET_DIR%\!FOLDER!'
+			XCOPY /I /Y /E "%MOD_DIR%\!FOLDER!" "%TARGET_DIR%\!FOLDER!" 1>NUL
 		)
-		FOR %%G IN (FILES_TO_COPY) DO (
-			SETLOCAL FILE=%%G
-			ECHO Copying file '%MOD_DIR%\%FILE%' to '%TARGET_DIR%\%FILE%'
-			XCOPY /Y "%MOD_DIR%\%FILE%" "%TARGET_DIR%\%FILE%"
+		FOR %%G IN (%FILES_TO_COPY%) DO (
+			SET FILE=%%G
+			ECHO Copying file '%MOD_DIR%\!FILE!' to '%TARGET_DIR%\!FILE!'
+			XCOPY /Y "%MOD_DIR%\!FILE!" "%TARGET_DIR%\" 1>NUL
 		)
 	)
-	IF EXIST "%ZIP_FILE%.zip" (
-		ECHO Deleting old '%ZIP_FILE%.zip'
-		DEL "%ZIP_FILE%.zip"
+	ECHO Processing zip file...
+	IF EXIST "%ZIP_FILE%" (
+		ECHO Deleting old '%ZIP_FILE%'
+		DEL "%ZIP_FILE%" 1>NUL
 	)
-	ECHO Adding mod files to '%ZIP_FILE%.zip'
-	FOR %%G IN (FOLDERS_TO_COPY) DO (
-			SETLOCAL FOLDER=%%G
-			ECHO Copying folder '%MOD_DIR%\%FOLDER%' to '%ZIP_FILE%.zip'
-			%ZIP_EXE% a "%ZIP_FILE%.zip" "%MOD_DIR%\%FOLDER%"
-		)
-		FOR %%G IN (FILES_TO_COPY) DO (
-			SETLOCAL FILE=%%G
-			ECHO Copying file '%MOD_DIR%\%FILE%' to '%ZIP_FILE%.zip'
-			%ZIP_EXE% a "%ZIP_FILE%.zip" "%MOD_DIR%\%FILE%"
-		)
+
+	ECHO Adding mod files to '%ZIP_FILE%'
+	FOR %%G IN (%FOLDERS_TO_COPY%) DO (
+		SET FOLDER=%%G
+		ECHO Copying folder '%MOD_DIR%\!FOLDER!' to '%ZIP_FILE%'
+		%ZIP_EXE% a "%ZIP_FILE%" "%MOD_DIR%\!FOLDER!" 1>NUL
+	)
+	FOR %%G IN (%FILES_TO_COPY%) DO (
+		SET FILE=%%G
+		ECHO Copying file '%MOD_DIR%\!FILE!' to '%ZIP_FILE%'
+		%ZIP_EXE% a "%ZIP_FILE%" "%MOD_DIR%\!FILE!" 1>NUL
+	)
+)
 ECHO ==========================
 ECHO post-build script complete
-)

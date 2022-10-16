@@ -16,20 +16,6 @@ using Verse;
 namespace ConfigurableTechprints {
     public class ConfigurableTechprintsSettings : ModSettings
     {
-        //NOTE: Just add a new const here and to the final sum when a dlc comes
-        //out to account for new techs. Unless I can find a way to do it dynamically
-
-        //counted on 2022/10/01 using notepad++ -> find all for '<ResearchProjectDef' in 'Rimworld/Data/Core/Defs/ResearchProjectDefs'. 76 results, 1 was abstract = 75 projects
-        private const int VanillaTechCount = 75;
-        //counted on 2022/10/01 using notepad++ -> find all for '<ResearchProjectDef' in 'Rimworld/Data/Royalty/Defs/ResearchProjectDefs'. 21 results, 2 were abstract = 19 projects (11 with techprints)
-        private const int RoyaltyTechCount = 19;
-        //counted on 2022/10/01 using notepad++ -> find all for '<ResearchProjectDef' in 'Rimworld/Data/Ideology/Defs/ResearchProjectDefs'. 3 results, 0 were abstract = 3 projects
-        private const int IdeologyTechCount = 3;
-
-        // total number of vanilla and dlc techs
-        private const int VanillaAndDlcTechCount = VanillaTechCount + RoyaltyTechCount + IdeologyTechCount; // = 97
-        public readonly float ExtraProjectCountMultiplier = Mathf.Clamp(DefDatabase<ResearchProjectDef>.DefCount / (float)VanillaAndDlcTechCount, 1, 3);
-
         //general techprint settings
         public int TechprintPerResearchPoints;
         public float MarketPriceMultiplier;
