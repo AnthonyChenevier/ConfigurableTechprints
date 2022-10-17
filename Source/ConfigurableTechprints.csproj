@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\v1.3\Assemblies\</OutputPath>
+    <OutputPath>..\v1.4\Assemblies\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -346,6 +346,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(ProjectDir)Install.bat" "C:\steam\steamapps\common\RimWorld" $(ConfigurationName) "$(ProjectDir)" "$(ProjectName)" "About Common v1.3" "LoadFolders.xml"</PostBuildEvent>
+    <PostBuildEvent>"$(ProjectDir)Install.bat" "C:\steam\steamapps\common\RimWorld" $(ConfigurationName) "$(ProjectDir)" "$(ProjectName)" "About Common v1.3 v1.4" "LoadFolders.xml"</PostBuildEvent>
   </PropertyGroup>
 </Project>

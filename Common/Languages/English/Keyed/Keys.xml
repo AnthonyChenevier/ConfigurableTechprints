@@ -8,6 +8,7 @@
     <ResetAll_Tooltip>Reset all settings to the mod's default values</ResetAll_Tooltip>
     <ViewReport_Button>View debug reports</ViewReport_Button>
     <ViewReport_Tooltip>Select and view various debugging processing reports</ViewReport_Tooltip>
+    <ReportButtonDialog_Message>Report has also been posted to game log. Some reports may look better in a fixed-width font:</ReportButtonDialog_Message>
     <DeleteCustomSettings_Tooltip>Delete custom settings</DeleteCustomSettings_Tooltip>
     <GeneralTechprintSettings_Tab>Gen. Techprint Settings</GeneralTechprintSettings_Tab>
     <CustomTechprintsSettings_Tab>Custom Techprints</CustomTechprintsSettings_Tab>

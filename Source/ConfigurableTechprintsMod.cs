@@ -101,6 +101,7 @@ public class ConfigurableTechprintsMod : Mod
         customTechprintSettingsPage = new CustomTechprintSettingsPage();
         generalTraderSettingsPage = new GeneralTraderSettingsPage();
         customTraderSettingsPage = new CustomTraderSettingsPage();
+        _currentTab = Tab.GeneralTechprintSettings;
 
         //Harmony.DEBUG = true;
         Harmony harmony = new("makeitso.configurabletechprints");
@@ -165,7 +166,6 @@ public class ConfigurableTechprintsMod : Mod
 
     public override void DoSettingsWindowContents(Rect inRect)
     {
-        _currentTab = Tab.GeneralTechprintSettings;
         _tabs = new List<TabRecord>
         {
             new("GeneralTechprintSettings_Tab".Translate(), () => _currentTab = Tab.GeneralTechprintSettings, () => _currentTab == Tab.GeneralTechprintSettings),
