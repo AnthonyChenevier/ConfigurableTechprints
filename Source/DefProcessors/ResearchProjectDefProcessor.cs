@@ -34,7 +34,7 @@ public static class ResearchProjectDefProcessor
         return $"\n\t- ResearchProjectDef ({projectDef.defName}) custom data processing report:{report}";
     }
 
-    public static string ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, ConfigurableTechprintsSettings modSettings)
+    public static string ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, ConfigurableTechprintsSettingsData modSettings)
     {
         int newTechprintCount = CalcTechprintCount(projectDef.baseCost, modSettings.TechprintPerResearchPoints);
         float newProjectBaseCost = CalcBaseCost(projectDef.baseCost, newTechprintCount, modSettings.ResearchBaseCostMultiplier);

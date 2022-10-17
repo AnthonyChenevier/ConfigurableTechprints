@@ -13,7 +13,7 @@ using Verse;
 
 namespace ConfigurableTechprints;
 
-public class ConfigurableTechprintsSettings : ModSettings
+public class ConfigurableTechprintsSettingsData : ModSettings
 {
     //general techprint settings
     public int TechprintPerResearchPoints;
@@ -35,7 +35,7 @@ public class ConfigurableTechprintsSettings : ModSettings
 
     public Dictionary<TechLevel, bool> TechLevelsWithTechprints;
 
-    public ConfigurableTechprintsSettings() { SetDefaults(); }
+    public ConfigurableTechprintsSettingsData() { SetDefaults(); }
 
     public void SetDefaults()
     {

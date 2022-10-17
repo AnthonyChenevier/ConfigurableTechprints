@@ -26,7 +26,7 @@ public static class DefGenerator_Patcher
     public static void GenerateImpliedDefs_PreResolve_Prefix()
     {
         ConfigurableTechprintsMod mod = ConfigurableTechprintsMod.Instance;
-        ConfigurableTechprintsSettings modSettings = mod.Settings;
+        ConfigurableTechprintsSettingsData modSettings = mod.Settings;
 
         //backing up original data so we can use it for recognizing default values and resetting changes to settings
         Log.Message("ConfigurableTechprintsMod :: Backing up pre-modification values...");

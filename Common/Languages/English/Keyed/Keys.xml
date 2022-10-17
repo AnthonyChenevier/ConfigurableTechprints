@@ -19,6 +19,7 @@
     <!--Basic generation settings-->
     <TechLevelsWithTechprints_Label>Generate techprints for projects at tech level:</TechLevelsWithTechprints_Label>
     <TechLevelsWithTechprints_Tooltip>Research projects at selected tech levels will have techprints automatically generated for them, using the settings below</TechLevelsWithTechprints_Tooltip>
+    <TechLevelProjectCount_Label>{0} projects</TechLevelProjectCount_Label>
     <TechLevelsWithTechprints_TechSelectTooltip>Generate techprints for all {0} research projects. </TechLevelsWithTechprints_TechSelectTooltip>
 
     <!-- Advanced techprint settings -->

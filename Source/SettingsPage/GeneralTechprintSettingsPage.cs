@@ -6,6 +6,9 @@
 // Last edited by: Anthony Chenevier on 2022/10/13 8:16 PM
 
 
+using System.Collections.Generic;
+using System.Linq;
+using ConfigurableTechprints.DataTypes;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -14,6 +17,25 @@ namespace ConfigurableTechprints.SettingsPage;
 
 internal class GeneralTechprintSettingsPage : ConfigurableTechprintsSettingPage
 {
+    private readonly Dictionary<TechLevel, int> _techLevelCounts;
+    private readonly List<TechLevel> _techLevels;
+
+    public GeneralTechprintSettingsPage()
+    {
+        //cache stuff once
+        _techLevels = settings.TechLevelsWithTechprints.Keys.ToList();
+        List<ResearchProjectDef> projectDefs = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
+        _techLevelCounts = new()
+        {
+            { TechLevel.Neolithic, projectDefs.Count(def => def.techLevel == TechLevel.Neolithic && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+            { TechLevel.Medieval, projectDefs.Count(def => def.techLevel == TechLevel.Medieval && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+            { TechLevel.Industrial, projectDefs.Count(def => def.techLevel == TechLevel.Industrial && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+            { TechLevel.Spacer, projectDefs.Count(def => def.techLevel == TechLevel.Spacer && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+            { TechLevel.Ultra, projectDefs.Count(def => def.techLevel == TechLevel.Ultra && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+            { TechLevel.Archotech, projectDefs.Count(def => def.techLevel == TechLevel.Archotech && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+        };
+    }
+
     protected override void DoPage(Listing_Standard list, Rect inRect)
     {
         string tprStringBuffer = null;
@@ -22,42 +44,15 @@ internal class GeneralTechprintSettingsPage : ConfigurableTechprintsSettingPage
         string bcStringBuffer = null;
 
         list.Label("TechLevelsWithTechprints_Label".Translate(), tooltip: "TechLevelsWithTechprints_Tooltip".Translate());
-        bool unlockNeolithic = settings.TechLevelsWithTechprints[TechLevel.Neolithic];
-        list.CheckboxLabeled("TechLevel_Neolithic".Translate().CapitalizeFirst() + ":",
-                             ref unlockNeolithic,
-                             "TechLevelsWithTechprints_TechSelectTooltip".Translate("TechLevel_Neolithic".Translate().CapitalizeFirst()));
+        foreach (TechLevel key in _techLevels)
+        {
+            bool value = settings.TechLevelsWithTechprints[key];
+            list.CheckboxLabeled($"{$"TechLevel_{key}".Translate().CapitalizeFirst()} ({"TechLevelProjectCount_Label".Translate(_techLevelCounts[key])}):",
+                                 ref value,
+                                 "TechLevelsWithTechprints_TechSelectTooltip".Translate($"TechLevel_{key}".Translate().CapitalizeFirst()));
 
-        settings.TechLevelsWithTechprints[TechLevel.Neolithic] = unlockNeolithic;
-        bool unlockMedieval = settings.TechLevelsWithTechprints[TechLevel.Medieval];
-        list.CheckboxLabeled("TechLevel_Medieval".Translate().CapitalizeFirst() + ":",
-                             ref unlockMedieval,
-                             "TechLevelsWithTechprints_TechSelectTooltip".Translate("TechLevel_Medieval".Translate().CapitalizeFirst()));
-
-        settings.TechLevelsWithTechprints[TechLevel.Medieval] = unlockMedieval;
-        bool unlockIndustrial = settings.TechLevelsWithTechprints[TechLevel.Industrial];
-        list.CheckboxLabeled("TechLevel_Industrial".Translate().CapitalizeFirst() + ":",
-                             ref unlockIndustrial,
-                             "TechLevelsWithTechprints_TechSelectTooltip".Translate("TechLevel_Industrial".Translate().CapitalizeFirst()));
-
-        settings.TechLevelsWithTechprints[TechLevel.Industrial] = unlockIndustrial;
-        bool unlockSpacer = settings.TechLevelsWithTechprints[TechLevel.Spacer];
-        list.CheckboxLabeled("TechLevel_Spacer".Translate().CapitalizeFirst() + ":",
-                             ref unlockSpacer,
-                             "TechLevelsWithTechprints_TechSelectTooltip".Translate("TechLevel_Spacer".Translate().CapitalizeFirst()));
-
-        settings.TechLevelsWithTechprints[TechLevel.Spacer] = unlockSpacer;
-        bool unlockUltra = settings.TechLevelsWithTechprints[TechLevel.Ultra];
-        list.CheckboxLabeled("TechLevel_Ultra".Translate().CapitalizeFirst() + ":",
-                             ref unlockUltra,
-                             "TechLevelsWithTechprints_TechSelectTooltip".Translate("TechLevel_Ultra".Translate().CapitalizeFirst()));
-
-        settings.TechLevelsWithTechprints[TechLevel.Ultra] = unlockUltra;
-        bool unlockArcho = settings.TechLevelsWithTechprints[TechLevel.Archotech];
-        list.CheckboxLabeled("TechLevel_Archotech".Translate().CapitalizeFirst() + ":",
-                             ref unlockArcho,
-                             "TechLevelsWithTechprints_TechSelectTooltip".Translate("TechLevel_Archotech".Translate().CapitalizeFirst()));
-
-        settings.TechLevelsWithTechprints[TechLevel.Archotech] = unlockArcho;
+            settings.TechLevelsWithTechprints[key] = value;
+        }
 
         list.GapLine();
         list.Label($"<b>{"TechprintGenerationSetting_Heading".Translate()}</b>");

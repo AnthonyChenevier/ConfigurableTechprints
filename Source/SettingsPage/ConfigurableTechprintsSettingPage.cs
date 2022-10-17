@@ -8,7 +8,7 @@
 
 namespace ConfigurableTechprints.SettingsPage;
 
-internal abstract class ConfigurableTechprintsSettingPage : SettingsPage<ConfigurableTechprintsSettings>
+internal abstract class ConfigurableTechprintsSettingPage : SettingsPage<ConfigurableTechprintsSettingsData>
 {
     protected ConfigurableTechprintsSettingPage() : base(ConfigurableTechprintsMod.Instance.Settings) { }
 }
