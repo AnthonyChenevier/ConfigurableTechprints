@@ -7,10 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurableTechprints", "C
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_1.3|Any CPU = Debug_1.3|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC41E232-A864-437B-8A66-32A408DC6EB1}.Debug_1.3|Any CPU.ActiveCfg = Debug_1.3|Any CPU
+		{FC41E232-A864-437B-8A66-32A408DC6EB1}.Debug_1.3|Any CPU.Build.0 = Debug_1.3|Any CPU
 		{FC41E232-A864-437B-8A66-32A408DC6EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC41E232-A864-437B-8A66-32A408DC6EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC41E232-A864-437B-8A66-32A408DC6EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
