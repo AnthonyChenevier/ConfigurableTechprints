@@ -16,6 +16,10 @@ namespace ConfigurableTechprints.SettingsPage;
 
 internal class GeneralTraderSettingsPage : ConfigurableTechprintsSettingPage
 {
+    private readonly List<TraderKindDef> _traderKindDefs;
+
+    public GeneralTraderSettingsPage() { _traderKindDefs = DefDatabase<TraderKindDef>.AllDefs.Where(t => t.stockGenerators.Any(sg => sg is StockGenerator_Techprints)).ToList(); }
+
     protected override void DoPage(Listing_Standard list, Rect inRect)
     {
         string tsmStringBuffer = null;
@@ -41,9 +45,8 @@ internal class GeneralTraderSettingsPage : ConfigurableTechprintsSettingPage
         list.GapLine();
         list.Label($"<b>{"IgnoreTraders_Heading".Translate()}</b>");
 
-        List<TraderKindDef> traderKindDefs = DefDatabase<TraderKindDef>.AllDefs.Where(t => t.stockGenerators.Any(sg => sg is StockGenerator_Techprints)).ToList();
 
-        foreach (TraderKindDef trader in traderKindDefs)
+        foreach (TraderKindDef trader in _traderKindDefs)
         {
             string traderDefName = trader.defName;
             bool ignoreThis = settings.IgnoredTraders.Contains(traderDefName);

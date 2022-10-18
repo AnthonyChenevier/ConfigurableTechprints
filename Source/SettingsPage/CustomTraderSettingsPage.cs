@@ -20,7 +20,7 @@ internal class CustomTraderSettingsPage : ConfigurableTechprintsSettingPage
 {
     protected override void DoPage(Listing_Standard list, Rect inRect)
     {
-        //cache values once
+        //cache values at beginning of each frame as they may change from input
         List<TraderKindDef> traderKindDefs = DefDatabase<TraderKindDef>.AllDefs.Where(t => !settings.IgnoredTraders.Contains(t.defName)).ToList();
         IEnumerable<TraderKindDef> uncustomizedTraders = traderKindDefs.Where(p => !settings.CustomTraders.ContainsKey(p.defName));
 
@@ -28,18 +28,19 @@ internal class CustomTraderSettingsPage : ConfigurableTechprintsSettingPage
         list.GapLine();
         List<string> deleteKeys = new();
         Dictionary<string, TraderData> newCustomTraders = new();
-        foreach (KeyValuePair<string, TraderData> pair in settings.CustomTraders)
-            if (!DoCustomTraderSection(list, out TraderData? customTrader, pair.Value, traderKindDefs.First(t => t.defName == pair.Key)))
-                deleteKeys.Add(pair.Key);
-            else if (customTrader != null)
-                newCustomTraders[pair.Key] = (TraderData)customTrader;
+        foreach ((string traderDefName, TraderData traderData) in settings.CustomTraders)
+            if (!DoCustomTraderSection(list, out TraderData? newTraderData, traderData, traderKindDefs.First(t => t.defName == traderDefName)))
+                deleteKeys.Add(traderDefName);
+            else if (newTraderData != null)
+                newCustomTraders[traderDefName] = (TraderData)newTraderData;
 
+        //save changes
         settings.CustomTraders.RemoveAll(t => deleteKeys.Contains(t.Key));
-        foreach (KeyValuePair<string, TraderData> pair in newCustomTraders)
-            if (settings.CustomTraders.ContainsKey(pair.Key))
-                settings.CustomTraders[pair.Key] = pair.Value;
+        foreach ((string traderDefName, TraderData traderData) in newCustomTraders)
+            if (settings.CustomTraders.ContainsKey(traderDefName))
+                settings.CustomTraders[traderDefName] = traderData;
             else
-                settings.CustomTraders.Add(pair.Key, pair.Value);
+                settings.CustomTraders.Add(traderDefName, traderData);
 
         if (list.ButtonText($"<b>+ {"CustomTradersAddNew_Button".Translate()} +</b>"))
             FloatMenuUtility.MakeMenu(uncustomizedTraders, p => $"{p.defName} - '{p.LabelCap}'", p => () => AddNewCustomEntry(p));

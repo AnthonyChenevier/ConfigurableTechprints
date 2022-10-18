@@ -17,12 +17,18 @@ namespace ConfigurableTechprints.SettingsPage;
 
 internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
 {
-    protected override void DoPage(Listing_Standard list, Rect inRect)
+    private readonly List<string> _categoryTags;
+
+    public CustomTechprintSettingsPage()
     {
-        //cache some values once
         List<FactionDef> factionDefs = DefDatabase<FactionDef>.AllDefs.Where(f => !f.isPlayer && !f.hidden && !f.permanentEnemy).ToList();
         factionDefs.SortBy(def => (int)def.techLevel);
-        List<string> categoryTags = factionDefs.Select(f => f.categoryTag).Distinct().ToList();
+        _categoryTags = factionDefs.Select(f => f.categoryTag).Distinct().ToList();
+    }
+
+    protected override void DoPage(Listing_Standard list, Rect inRect)
+    {
+        //cache some values once perframe
         IEnumerable<ResearchProjectDef> uncustomizedProjects = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => !settings.CustomTechprints.ContainsKey(p.defName));
 
         list.Label($"<color=red>{"CustomTechprintSettings_Note".Translate()}</color>");
@@ -31,7 +37,7 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
         List<string> deleteKeys = new();
         Dictionary<string, TechprintData> newCustomTechprints = new();
         foreach (KeyValuePair<string, TechprintData> pair in settings.CustomTechprints)
-            if (!DoCustomTechprintSection(list, out TechprintData? customTechprint, pair.Value, ResearchProjectDef.Named(pair.Key), categoryTags))
+            if (!DoCustomTechprintSection(list, out TechprintData? customTechprint, pair.Value, ResearchProjectDef.Named(pair.Key)))
                 deleteKeys.Add(pair.Key);
             else if (customTechprint != null)
                 newCustomTechprints[pair.Key] = (TechprintData)customTechprint;
@@ -62,11 +68,7 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
         };
     }
 
-    private bool DoCustomTechprintSection(Listing_Standard list,
-                                          out TechprintData? techprintDataOut,
-                                          TechprintData techprintDataIn,
-                                          ResearchProjectDef projectDef,
-                                          List<string> categoryTags)
+    private bool DoCustomTechprintSection(Listing_Standard list, out TechprintData? techprintDataOut, TechprintData techprintDataIn, ResearchProjectDef projectDef)
     {
         techprintDataOut = null;
 
@@ -79,7 +81,7 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
         //do UI
         //pre-compute section height: heading, techprint count, base cost, market value,
         //commonality and gap line heights + however many factions we need tickboxes for
-        float sectionHeight = 134f + categoryTags.Count * 24f;
+        float sectionHeight = 134f + _categoryTags.Count * 24f;
         Listing_Standard section = list.BeginSection(sectionHeight);
 
         bool removeThis = false;
@@ -99,24 +101,24 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
         section.GapLine();
 
         bool categoriesChanged = false;
-        foreach (string categoryTag in categoryTags)
+        foreach (string tag in _categoryTags)
         {
-            bool tagEnabled = techprintDataIn.heldByFactionCategoryTags.Contains(categoryTag);
-            section.CheckboxLabeled($"{"EnableCategory_Label".Translate()} ({categoryTag}):", ref tagEnabled);
+            bool tagEnabled = techprintDataIn.heldByFactionCategoryTags.Contains(tag);
+            section.CheckboxLabeled($"{"EnableCategory_Label".Translate()} ({tag}):", ref tagEnabled);
             if (tagEnabled)
             {
-                if (techprintDataIn.heldByFactionCategoryTags.Contains(categoryTag))
+                if (techprintDataIn.heldByFactionCategoryTags.Contains(tag))
                     continue;
 
-                techprintDataIn.heldByFactionCategoryTags.Add(categoryTag);
+                techprintDataIn.heldByFactionCategoryTags.Add(tag);
                 categoriesChanged = true;
             }
             else
             {
-                if (!techprintDataIn.heldByFactionCategoryTags.Contains(categoryTag))
+                if (!techprintDataIn.heldByFactionCategoryTags.Contains(tag))
                     continue;
 
-                techprintDataIn.heldByFactionCategoryTags.Remove(categoryTag);
+                techprintDataIn.heldByFactionCategoryTags.Remove(tag);
                 categoriesChanged = true;
             }
         }

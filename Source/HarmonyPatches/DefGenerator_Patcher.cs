@@ -144,7 +144,6 @@ public static class DefGenerator_Patcher
                                                                                                                   !customTechprints.ContainsKey(p.defName) &&
                                                                                                                   modSettings.TechLevelsWithTechprints[p.techLevel]).ToList();
 
-        Log.Message($"{projectsRequiringTechprints.Count}");
         string generatedTechprintsReport = "";
         //generate techprints from settings
         foreach (ResearchProjectDef projectDef in projectsRequiringTechprints)
