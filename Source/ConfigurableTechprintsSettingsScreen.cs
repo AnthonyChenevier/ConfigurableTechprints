@@ -16,7 +16,7 @@ namespace ConfigurableTechprints;
 
 //use this class for stuff that requires defs to be loaded. like a settings page that uses translations
 [StaticConstructorOnStartup]
-public static class CustomTechprintSettingsPage
+public static class ConfigurableTechprintsSettingsScreen
 {
     private readonly static GeneralTechprintSettingsPage generalTechprintSettingsPage;
     private readonly static SettingsPage.CustomTechprintSettingsPage customTechprintSettingsPage;
@@ -36,7 +36,7 @@ public static class CustomTechprintSettingsPage
     //Settings window stuff
     private static bool _restartRequired = true; //try to make this dynamically react to changes from last saved settings, eventually
 
-    static CustomTechprintSettingsPage()
+    static ConfigurableTechprintsSettingsScreen()
     {
         _tabs = new List<TabRecord>
         {

@@ -119,5 +119,5 @@ public class ConfigurableTechprintsMod : Mod
     public override string SettingsCategory() { return "ConfigurableTechprintsModName".Translate(); }
 
     //pass through to static class 
-    public override void DoSettingsWindowContents(Rect inRect) { CustomTechprintSettingsPage.Draw(inRect); }
+    public override void DoSettingsWindowContents(Rect inRect) { ConfigurableTechprintsSettingsScreen.Draw(inRect); }
 }

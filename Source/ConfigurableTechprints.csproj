@@ -39,7 +39,7 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CustomTechprintSettingsPage.cs" />
+    <Compile Include="ConfigurableTechprintsSettingsScreen.cs" />
     <Compile Include="SettingsPage\CustomTraderSettingsPage.cs" />
     <Compile Include="DataTypes\CountChanceExposable.cs" />
     <Compile Include="DataTypes\NativeTechprint_DefModExtension.cs" />
