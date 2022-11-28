@@ -19,7 +19,7 @@ namespace ConfigurableTechprints;
 public static class ConfigurableTechprintsSettingsScreen
 {
     private readonly static GeneralTechprintSettingsPage generalTechprintSettingsPage;
-    private readonly static SettingsPage.CustomTechprintSettingsPage customTechprintSettingsPage;
+    private readonly static CustomTechprintSettingsPage customTechprintSettingsPage;
     private readonly static GeneralTraderSettingsPage generalTraderSettingsPage;
     private readonly static CustomTraderSettingsPage customTraderSettingsPage;
     private static List<TabRecord> _tabs;
@@ -47,7 +47,7 @@ public static class ConfigurableTechprintsSettingsScreen
         };
 
         generalTechprintSettingsPage = new GeneralTechprintSettingsPage();
-        customTechprintSettingsPage = new SettingsPage.CustomTechprintSettingsPage();
+        customTechprintSettingsPage = new CustomTechprintSettingsPage();
         generalTraderSettingsPage = new GeneralTraderSettingsPage();
         customTraderSettingsPage = new CustomTraderSettingsPage();
         _currentTab = Tab.GeneralTechprintSettings;
@@ -93,6 +93,23 @@ public static class ConfigurableTechprintsSettingsScreen
         //draw tabs now after content to blend the top
         TabDrawer.DrawTabs(contentRect, _tabs, 400f);
         main.End();
+
+        DrawRestartButton(inRect);
+    }
+
+    private static void DrawRestartButton(Rect inRect)
+    {
+        Rect buttonRect = new(inRect)
+        {
+            xMin = inRect.xMax - 250f,
+            xMax = inRect.xMax,
+            yMin = inRect.yMax + 2f, //go below inrect
+            height = 40f
+        };
+
+        TooltipHandler.TipRegion(buttonRect, "RestartGame_Tooltip".Translate());
+        if (Widgets.ButtonText(buttonRect, "RestartGame_Button".Translate()))
+            RestartFromChangedModSettings();
     }
 
     private static void DoSettingsHeader(Listing_Standard list, Rect inRect)
@@ -121,10 +138,17 @@ public static class ConfigurableTechprintsSettingsScreen
         list.GapLine();
     }
 
-    // not sure if this method is necessary, but nice to have in the toolbox if I need to implement it
+    // easy restart hook
     public static void RestartFromChangedModSettings()
     {
-        Find.WindowStack.Add(new Dialog_MessageBox("ModSettingsChanged_Message".Translate(), "OK".Translate(), GenCommandLine.Restart, "Later".Translate()));
+        Find.WindowStack.Add(new Dialog_MessageBox("ModSettingsChanged_Message".Translate(),
+                                                   "OK".Translate(),
+                                                   () =>
+                                                   {
+                                                       ConfigurableTechprintsMod.Instance.WriteSettings();
+                                                       GenCommandLine.Restart();
+                                                   },
+                                                   "Later".Translate()));
     }
 
     public static void DisplayReport(string key, string report)

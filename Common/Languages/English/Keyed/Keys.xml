@@ -2,8 +2,10 @@
 <LanguageData>
     <!-- General stuff -->
     <ConfigurableTechprintsModName>Configurable Techprints</ConfigurableTechprintsModName>
-    <ModSettingsChanged_Message>Configurable techprints settings have changed and a restart is required to apply them. Restart now?</ModSettingsChanged_Message>
     <RestartRequired_Note>NOTE: Game restart is required for most changes to take effect.</RestartRequired_Note>
+    <RestartGame_Button>Apply settings and restart</RestartGame_Button>
+    <RestartGame_Tooltip>Restarts Rimworld and applies any changes to techprint settings</RestartGame_Tooltip>
+    <ModSettingsChanged_Message>Really restart Rimworld now?\n\n(Yes, it's an 'are you sure?' dialog. Better this than a misclick-restart with a zillion mods I reckon)</ModSettingsChanged_Message>
     <ResetAll_Button>Reset all settings</ResetAll_Button>
     <ResetAll_Tooltip>Reset all settings to the mod's default values</ResetAll_Tooltip>
     <ViewReport_Button>View debug reports</ViewReport_Button>
@@ -14,6 +16,9 @@
     <CustomTechprintsSettings_Tab>Custom Techprints</CustomTechprintsSettings_Tab>
     <GeneralTraderSettings_Tab>Gen. Trader Settings</GeneralTraderSettings_Tab>
     <CustomTradersSettings_Tab>Custom Traders</CustomTradersSettings_Tab>
+
+    <MalformedDefName_Notice>This modded research project (defName:{0}) cannot have techprints because the defName ends in a digit, and Rimworld's techprint generation cannot handle it.\n\nThis is not an issue for the project by itself, but any method of generating techprints (not just Configurable Techprints) will produce errors for this techprint or be forced to hack the project's defName (not advised for compatibility reasons).\n\nPlease let the author of this project that the defName has this issue.</MalformedDefName_Notice>
+
 
     <!-- General techprint settings page -->
     <!--Basic generation settings-->

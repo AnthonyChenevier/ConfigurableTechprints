@@ -17,6 +17,9 @@ public static class ResearchProjectDefProcessor
 {
     public static string ProcessCustomTechprint(ResearchProjectDef projectDef, TechprintData customData)
     {
+        if (ConfigurableTechprintsMod.IsProjectNameMalformed(projectDef.defName))
+            return ErrorReport(projectDef.defName);
+
         int newTechprintCount = customData.techprintCount;
         float newProjectBaseCost = customData.baseCost;
         float newTechprintMarketValue = customData.techprintMarketValue;
@@ -36,6 +39,9 @@ public static class ResearchProjectDefProcessor
 
     public static string ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, ConfigurableTechprintsSettingsData modSettings)
     {
+        if (ConfigurableTechprintsMod.IsProjectNameMalformed(projectDef.defName))
+            return ErrorReport(projectDef.defName);
+
         int newTechprintCount = CalcTechprintCount(projectDef.baseCost, modSettings.TechprintPerResearchPoints);
         float newProjectBaseCost = CalcBaseCost(projectDef.baseCost, newTechprintCount, modSettings.ResearchBaseCostMultiplier);
         float newTechprintMarketValue = CalcTechprintMarketValue(projectDef.baseCost, newTechprintCount, modSettings.MarketPriceMultiplier);
@@ -51,6 +57,15 @@ public static class ResearchProjectDefProcessor
 
 
         return $"\n\t- ResearchProjectDef ({projectDef.defName}) generated techprint processing report:{report}";
+    }
+
+    private static string ErrorReport(string defName)
+    {
+        string errMsg =
+            $"\n\t- ResearchProjectDef ({defName}) is malformed (Rimworld's techprint generator cannot create a techprint from a def with a defName that ends in a digit). " +
+            $"This would generate an error if the techprint was added by XML also, and is a naming convention issue that should be fixed by the developer of the mod project def.";
+
+        return errMsg.Colorize(ColorLibrary.RedReadable);
     }
 
     /// <summary>

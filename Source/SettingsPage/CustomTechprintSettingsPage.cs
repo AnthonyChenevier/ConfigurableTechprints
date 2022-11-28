@@ -50,9 +50,18 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
             else
                 settings.CustomTechprints.Add(pair.Key, pair.Value);
 
-        //add new entry
-        if (list.ButtonText($"<b>+ {"CustomTechprintAddNew_Button".Translate()} +</b>"))
-            FloatMenuUtility.MakeMenu(uncustomizedProjects, p => p.LabelCap, p => () => AddNewCustomEntry(p));
+        if (!list.ButtonText($"<b>+ {"CustomTechprintAddNew_Button".Translate()} +</b>"))
+            return;
+
+        //do project selection menu
+        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Select(project => ConfigurableTechprintsMod.IsProjectNameMalformed(project.defName)
+                                                                                      ? new FloatMenuOption(((string)project.LabelCap).Colorize(ColorLibrary.RedReadable),
+                                                                                                            () => { },
+                                                                                                            MenuOptionPriority.DisabledOption,
+                                                                                                            rect => TooltipHandler.TipRegion(rect,
+                                                                                                                "MalformedDefName_Notice".Translate(project.defName)
+                                                                                                                    .Colorize(ColorLibrary.RedReadable)))
+                                                                                      : new FloatMenuOption(project.LabelCap, () => AddNewCustomEntry(project))).ToList()));
     }
 
     private void AddNewCustomEntry(ResearchProjectDef projectDef)

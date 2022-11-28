@@ -1,15 +1,22 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿// AssemblyInfo.cs
+// 
+// Part of ConfigurableTechprints - ConfigurableTechprints
+// 
+// Created by: Anthony Chenevier on 2022/10/04 3:51 PM
+// Last edited by: Anthony Chenevier on 2022/11/28 9:48 AM
+
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 // 어셈블리에 대한 일반 정보는 다음 특성 집합을 통해 
 // 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
 // 이러한 특성 값을 변경하세요.
-[assembly: AssemblyTitle("lostTechnologyCore")]
+[assembly: AssemblyTitle("ConfigurableTechprints")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("lostTechnologyCore")]
+[assembly: AssemblyProduct("ConfigurableTechprints")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

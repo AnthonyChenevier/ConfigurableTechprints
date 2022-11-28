@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using ConfigurableTechprints.DataTypes;
 using ConfigurableTechprints.DefProcessors;
 using HarmonyLib;
@@ -120,4 +121,5 @@ public class ConfigurableTechprintsMod : Mod
 
     //pass through to static class 
     public override void DoSettingsWindowContents(Rect inRect) { ConfigurableTechprintsSettingsScreen.Draw(inRect); }
+    public static bool IsProjectNameMalformed(string name) { return new Regex("\\d").IsMatch(name.Substring(name.Length - 1)); }
 }
