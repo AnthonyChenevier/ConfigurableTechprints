@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ConfigurableTechprints.DataTypes;
+using HarmonyLib;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -31,7 +32,7 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
         //cache some values once perframe
         IEnumerable<ResearchProjectDef> uncustomizedProjects = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => !settings.CustomTechprints.ContainsKey(p.defName));
 
-        list.Label($"<color=red>{"CustomTechprintSettings_Note".Translate()}</color>");
+        list.Label("CustomTechprintSettings_Note".Translate().Colorize(ColorLibrary.RedReadable));
         list.GapLine();
 
         List<string> deleteKeys = new();
@@ -54,14 +55,32 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
             return;
 
         //do project selection menu
-        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Select(project => ConfigurableTechprintsMod.IsProjectNameMalformed(project.defName)
-                                                                                      ? new FloatMenuOption(((string)project.LabelCap).Colorize(ColorLibrary.RedReadable),
-                                                                                                            () => { },
-                                                                                                            MenuOptionPriority.DisabledOption,
-                                                                                                            rect => TooltipHandler.TipRegion(rect,
-                                                                                                                "MalformedDefName_Notice".Translate(project.defName)
-                                                                                                                    .Colorize(ColorLibrary.RedReadable)))
-                                                                                      : new FloatMenuOption(project.LabelCap, () => AddNewCustomEntry(project))).ToList()));
+        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Select(project =>
+        {
+            if (ConfigurableTechprintsMod.IsProjectNameMalformed(project.defName))
+                return DisabledTechprintMenuItem(project);
+
+            if (project.RequiredStudiedThingCount > 0)
+                return StudiedThingMenuItem(project);
+
+            return new FloatMenuOption(project.LabelCap, () => AddNewCustomEntry(project));
+        }).ToList()));
+    }
+
+    private FloatMenuOption StudiedThingMenuItem(ResearchProjectDef project)
+    {
+        string studiableThingNames = project.requiredStudied.Select(t => t.defName).Join();
+        return new FloatMenuOption(project.LabelCap.Colorize(ColorLibrary.BabyBlue),
+                                   () => AddNewCustomEntry(project),
+                                   mouseoverGuiAction: rect => TooltipHandler.TipRegion(rect, "StudiableThing_Notice".Translate(project.defName, studiableThingNames)));
+    }
+
+    private FloatMenuOption DisabledTechprintMenuItem(ResearchProjectDef project)
+    {
+        return new FloatMenuOption(project.LabelCap.Colorize(ColorLibrary.RedReadable),
+                                   null,
+                                   MenuOptionPriority.DisabledOption,
+                                   rect => TooltipHandler.TipRegion(rect, "MalformedDefName_Notice".Translate(project.defName).Colorize(ColorLibrary.RedReadable)));
     }
 
     private void AddNewCustomEntry(ResearchProjectDef projectDef)

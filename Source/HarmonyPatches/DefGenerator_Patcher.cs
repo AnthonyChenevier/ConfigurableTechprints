@@ -139,8 +139,8 @@ public static class DefGenerator_Patcher
             mod.Reports["CustomProjects"] = "None processed";
         }
 
-        //filter all non-custom, non-native 
-        List<ResearchProjectDef> projectsRequiringTechprints = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => !p.HasModExtension<NativeTechprint_DefModExtension>() &&
+        //filter all non-custom, non-native, non-studiableThing-having
+        List<ResearchProjectDef> projectsRequiringTechprints = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => ConfigurableTechprintsMod.CanHaveAutoTechprints(p) &&
                                                                                                                   !customTechprints.ContainsKey(p.defName) &&
                                                                                                                   modSettings.TechLevelsWithTechprints[p.techLevel]).ToList();
 

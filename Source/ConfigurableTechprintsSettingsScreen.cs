@@ -121,7 +121,7 @@ public static class ConfigurableTechprintsSettingsScreen
         {
             TextAnchor anchor = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(headerContentRect.LeftPart(0.7f), $"<color=red>{"RestartRequired_Note".Translate()}</color>");
+            Widgets.Label(headerContentRect.LeftPart(0.7f), $"RestartRequired_Note".Translate().Colorize(ColorLibrary.RedReadable));
             Text.Anchor = anchor;
         }
 
@@ -153,7 +153,7 @@ public static class ConfigurableTechprintsSettingsScreen
 
     public static void DisplayReport(string key, string report)
     {
-        Find.WindowStack.Add(new Dialog_MessageBox($"{"ReportButtonDialog_Message".Translate()}:{report}", title: $"{key}"));
+        Find.WindowStack.Add(new Dialog_MessageBox($"{"ReportButtonDialog_Message".Translate()}:{report}", title: key));
         Log.Message($"{key}:{report}");
     }
 }

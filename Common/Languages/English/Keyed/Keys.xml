@@ -19,6 +19,8 @@
 
     <MalformedDefName_Notice>This modded research project (defName:{0}) cannot have techprints because the defName ends in a digit, and Rimworld's techprint generation cannot handle it.\n\nThis is not an issue for the project by itself, but any method of generating techprints (not just Configurable Techprints) will produce errors for this techprint or be forced to hack the project's defName (not advised for compatibility reasons).\n\nPlease let the author of this project that the defName has this issue.</MalformedDefName_Notice>
 
+    <StudiableThing_Notice>This research project (defName:{0}) requiredStudied is not empty: {1}. Setting techprints for this project will override these requirements.</StudiableThing_Notice>
+
 
     <!-- General techprint settings page -->
     <!--Basic generation settings-->

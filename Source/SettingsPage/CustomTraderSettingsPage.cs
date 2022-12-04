@@ -24,7 +24,7 @@ internal class CustomTraderSettingsPage : ConfigurableTechprintsSettingPage
         List<TraderKindDef> traderKindDefs = DefDatabase<TraderKindDef>.AllDefs.Where(t => !settings.IgnoredTraders.Contains(t.defName)).ToList();
         IEnumerable<TraderKindDef> uncustomizedTraders = traderKindDefs.Where(p => !settings.CustomTraders.ContainsKey(p.defName));
 
-        list.Label($"<color=red>{"CustomTraders_Note".Translate()}</color>");
+        list.Label("CustomTraders_Note".Translate().Colorize(ColorLibrary.RedReadable));
         list.GapLine();
         List<string> deleteKeys = new();
         Dictionary<string, TraderData> newCustomTraders = new();

@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ConfigurableTechprints.DataTypes;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -25,14 +24,14 @@ internal class GeneralTechprintSettingsPage : ConfigurableTechprintsSettingPage
         //cache stuff once
         _techLevels = settings.TechLevelsWithTechprints.Keys.ToList();
         List<ResearchProjectDef> projectDefs = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
-        _techLevelCounts = new()
+        _techLevelCounts = new Dictionary<TechLevel, int>
         {
-            { TechLevel.Neolithic, projectDefs.Count(def => def.techLevel == TechLevel.Neolithic && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
-            { TechLevel.Medieval, projectDefs.Count(def => def.techLevel == TechLevel.Medieval && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
-            { TechLevel.Industrial, projectDefs.Count(def => def.techLevel == TechLevel.Industrial && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
-            { TechLevel.Spacer, projectDefs.Count(def => def.techLevel == TechLevel.Spacer && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
-            { TechLevel.Ultra, projectDefs.Count(def => def.techLevel == TechLevel.Ultra && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
-            { TechLevel.Archotech, projectDefs.Count(def => def.techLevel == TechLevel.Archotech && !def.HasModExtension<NativeTechprint_DefModExtension>()) },
+            { TechLevel.Neolithic, projectDefs.Count(def => def.techLevel == TechLevel.Neolithic && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
+            { TechLevel.Medieval, projectDefs.Count(def => def.techLevel == TechLevel.Medieval && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
+            { TechLevel.Industrial, projectDefs.Count(def => def.techLevel == TechLevel.Industrial && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
+            { TechLevel.Spacer, projectDefs.Count(def => def.techLevel == TechLevel.Spacer && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
+            { TechLevel.Ultra, projectDefs.Count(def => def.techLevel == TechLevel.Ultra && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
+            { TechLevel.Archotech, projectDefs.Count(def => def.techLevel == TechLevel.Archotech && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
         };
     }
 

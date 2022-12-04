@@ -165,11 +165,20 @@ public static class ResearchProjectDefProcessor
             $"{(projectDef.heldByFactionCategoryTags != null ? string.Join(", ", projectDef.heldByFactionCategoryTags) : "NONE")}"
         };
 
-        return $"\n{" ",30}{"old values",20}{"new values",20}" +
-               $"\n{"baseCost",30}{oldValuesString[0],20}{newValuesString[0],20}" +
-               $"\n{"techprintCount",30}{oldValuesString[1],20}{newValuesString[1],20}" +
-               $"\n{"techPrintMarketValue",30}{oldValuesString[2],20}{newValuesString[2],20}" +
-               $"\n{"techprintCommonality",30}{oldValuesString[3],20}{newValuesString[3],20}" +
-               $"\n{"heldByFactionCategoryTags",30}{oldValuesString[4],20}{newValuesString[4],20}";
+        string report = $"\n{" ",30}{"old values",20}{"new values",20}" +
+                        $"\n{"baseCost",30}{oldValuesString[0],20}{newValuesString[0],20}" +
+                        $"\n{"techprintCount",30}{oldValuesString[1],20}{newValuesString[1],20}" +
+                        $"\n{"techPrintMarketValue",30}{oldValuesString[2],20}{newValuesString[2],20}" +
+                        $"\n{"techprintCommonality",30}{oldValuesString[3],20}{newValuesString[3],20}" +
+                        $"\n{"heldByFactionCategoryTags",30}{oldValuesString[4],20}{newValuesString[4],20}";
+
+
+        if (newTechprintCount > 0 && projectDef.requiredStudied.Any())
+        {
+            projectDef.requiredStudied.Clear();
+            report += "\n- Cleared project.requiredStudied.";
+        }
+
+        return report;
     }
 }

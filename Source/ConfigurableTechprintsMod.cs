@@ -122,4 +122,5 @@ public class ConfigurableTechprintsMod : Mod
     //pass through to static class 
     public override void DoSettingsWindowContents(Rect inRect) { ConfigurableTechprintsSettingsScreen.Draw(inRect); }
     public static bool IsProjectNameMalformed(string name) { return new Regex("\\d").IsMatch(name.Substring(name.Length - 1)); }
+    public static bool CanHaveAutoTechprints(ResearchProjectDef def) { return !def.HasModExtension<NativeTechprint_DefModExtension>() && def.RequiredStudiedThingCount == 0; }
 }
