@@ -173,9 +173,9 @@ public static class ResearchProjectDefProcessor
                         $"\n{"heldByFactionCategoryTags",30}{oldValuesString[4],20}{newValuesString[4],20}";
 
 
-        if (newTechprintCount > 0 && projectDef.requiredStudied != null && projectDef.requiredStudied.Any())
+        if (newTechprintCount > 0 && projectDef.requiredAnalyzed != null && projectDef.requiredAnalyzed.Any())
         {
-            projectDef.requiredStudied.Clear();
+            projectDef.requiredAnalyzed.Clear();
             report += "\n- Cleared project.requiredStudied.";
         }
 

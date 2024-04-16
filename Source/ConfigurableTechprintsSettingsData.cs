@@ -57,12 +57,8 @@ public class ConfigurableTechprintsSettingsData : ModSettings
 
         TechLevelsWithTechprints = new Dictionary<TechLevel, bool>
         {
-            [TechLevel.Neolithic] = true,
-            [TechLevel.Medieval] = true,
-            [TechLevel.Industrial] = true,
-            [TechLevel.Spacer] = true,
-            [TechLevel.Ultra] = true,
-            [TechLevel.Archotech] = true
+            [TechLevel.Animal] = false, [TechLevel.Neolithic] = true, [TechLevel.Medieval] = true, [TechLevel.Industrial] = true,
+            [TechLevel.Spacer] = true, [TechLevel.Ultra] = true, [TechLevel.Archotech] = true
         };
     }
 

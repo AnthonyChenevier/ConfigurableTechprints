@@ -60,7 +60,7 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
             if (ConfigurableTechprintsMod.IsProjectNameMalformed(project.defName))
                 return DisabledTechprintMenuItem(project);
 
-            if (project.RequiredStudiedThingCount > 0)
+            if (project.RequiredAnalyzedThingCount > 0)
                 return StudiedThingMenuItem(project);
 
             return new FloatMenuOption(project.LabelCap, () => AddNewCustomEntry(project));
@@ -69,7 +69,7 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
 
     private FloatMenuOption StudiedThingMenuItem(ResearchProjectDef project)
     {
-        string studiableThingNames = project.requiredStudied.Select(t => t.defName).Join();
+        string studiableThingNames = project.requiredAnalyzed.Select(t => t.defName).Join();
         return new FloatMenuOption(project.LabelCap.Colorize(ColorLibrary.BabyBlue),
                                    () => AddNewCustomEntry(project),
                                    mouseoverGuiAction: rect => TooltipHandler.TipRegion(rect, "StudiableThing_Notice".Translate(project.defName, studiableThingNames)));
