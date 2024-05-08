@@ -11,13 +11,13 @@ using Verse;
 
 namespace ConfigurableTechprints.SettingsPage;
 
-internal abstract class SettingsPage<T> where T : ModSettings
+internal abstract class BaseSettingsPage<T> where T : ModSettings
 {
     protected readonly T settings;
     private float _contentHeight;
     private Vector2 _scrollPosition;
 
-    public SettingsPage(T settings)
+    protected BaseSettingsPage(T settings)
     {
         this.settings = settings;
         _contentHeight = float.MaxValue;

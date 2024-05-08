@@ -37,7 +37,7 @@ public static class ResearchProjectDefProcessor
         return $"\n\t- ResearchProjectDef ({projectDef.defName}) custom data processing report:{report}";
     }
 
-    public static string ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, ConfigurableTechprintsSettingsData modSettings)
+    public static string ProcessGeneratedTechprint(ResearchProjectDef projectDef, List<string> factionCategoryTagsForTechLevel, CTModSettings modSettings)
     {
         if (ConfigurableTechprintsMod.IsProjectNameMalformed(projectDef.defName))
             return ErrorReport(projectDef.defName);

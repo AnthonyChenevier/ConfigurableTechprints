@@ -48,12 +48,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ConfigurableTechprintsSettingsScreen.cs" />
+    <Compile Include="CTSettingsScreen.cs" />
+    <Compile Include="ClassExtension_BackCompatibility.cs" />
     <Compile Include="SettingsPage\CustomTraderSettingsPage.cs" />
     <Compile Include="DataTypes\CountChanceExposable.cs" />
     <Compile Include="DataTypes\NativeTechprint_DefModExtension.cs" />
     <Compile Include="ConfigurableTechprintsMod.cs" />
-    <Compile Include="ConfigurableTechprintsSettingsData.cs" />
+    <Compile Include="CTModSettings.cs" />
     <Compile Include="SettingsPage\GeneralTraderSettingsPage.cs" />
     <Compile Include="SettingsPage\ListingHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,10 +64,10 @@
     <Compile Include="HarmonyPatches\TechprintUtility_Patcher.cs" />
     <Compile Include="DataTypes\TraderData.cs" />
     <Compile Include="DefProcessors\TraderKindDefProcessor.cs" />
-    <Compile Include="SettingsPage\ConfigurableTechprintsSettingPage.cs" />
+    <Compile Include="SettingsPage\CTSettingsPage.cs" />
     <Compile Include="SettingsPage\CustomTechprintSettingsPage.cs" />
     <Compile Include="SettingsPage\GeneralTechprintSettingsPage.cs" />
-    <Compile Include="SettingsPage\SettingsPage.cs" />
+    <Compile Include="SettingsPage\BaseSettingsPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -97,6 +98,7 @@
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
       <HintPath>C:\steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>

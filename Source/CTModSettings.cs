@@ -13,7 +13,7 @@ using Verse;
 
 namespace ConfigurableTechprints;
 
-public class ConfigurableTechprintsSettingsData : ModSettings
+public class CTModSettings : ModSettings
 {
     //general techprint settings
     public int TechprintPerResearchPoints;
@@ -35,7 +35,7 @@ public class ConfigurableTechprintsSettingsData : ModSettings
 
     public Dictionary<TechLevel, bool> TechLevelsWithTechprints;
 
-    public ConfigurableTechprintsSettingsData() { SetDefaults(); }
+    public CTModSettings() { SetDefaults(); }
 
     public void SetDefaults()
     {
@@ -57,8 +57,14 @@ public class ConfigurableTechprintsSettingsData : ModSettings
 
         TechLevelsWithTechprints = new Dictionary<TechLevel, bool>
         {
-            [TechLevel.Animal] = false, [TechLevel.Neolithic] = true, [TechLevel.Medieval] = true, [TechLevel.Industrial] = true,
-            [TechLevel.Spacer] = true, [TechLevel.Ultra] = true, [TechLevel.Archotech] = true
+            /*[TechLevel.Undefined] = false,*/
+            [TechLevel.Animal] = false,
+            [TechLevel.Neolithic] = true,
+            [TechLevel.Medieval] = true,
+            [TechLevel.Industrial] = true,
+            [TechLevel.Spacer] = true,
+            [TechLevel.Ultra] = true,
+            [TechLevel.Archotech] = true
         };
     }
 

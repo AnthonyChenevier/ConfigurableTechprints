@@ -13,8 +13,14 @@ using UnityEngine;
 using Verse;
 
 namespace ConfigurableTechprints.SettingsPage;
+// BackCompatibility_HarmonyPatch.cs
+// 
+// Part of GrowthVatsOverclocked - GrowthVatsOverclocked
+// 
+// Created by: Anthony Chenevier on 2023/01/01 3:51 PM
+// Last edited by: Anthony Chenevier on 2023/01/01 3:51 PM
 
-internal class GeneralTechprintSettingsPage : ConfigurableTechprintsSettingPage
+internal class GeneralTechprintSettingsPage : CTSettingsPage
 {
     private readonly Dictionary<TechLevel, int> _techLevelCounts;
     private readonly List<TechLevel> _techLevels;
@@ -26,6 +32,8 @@ internal class GeneralTechprintSettingsPage : ConfigurableTechprintsSettingPage
         List<ResearchProjectDef> projectDefs = DefDatabase<ResearchProjectDef>.AllDefsListForReading;
         _techLevelCounts = new Dictionary<TechLevel, int>
         {
+            /*{ TechLevel.Undefined, projectDefs.Count(def => def.techLevel == TechLevel.Undefined && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },*/
+            { TechLevel.Animal, projectDefs.Count(def => def.techLevel == TechLevel.Animal && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
             { TechLevel.Neolithic, projectDefs.Count(def => def.techLevel == TechLevel.Neolithic && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
             { TechLevel.Medieval, projectDefs.Count(def => def.techLevel == TechLevel.Medieval && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },
             { TechLevel.Industrial, projectDefs.Count(def => def.techLevel == TechLevel.Industrial && ConfigurableTechprintsMod.CanHaveAutoTechprints(def)) },

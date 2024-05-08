@@ -16,7 +16,7 @@ using Verse;
 
 namespace ConfigurableTechprints.SettingsPage;
 
-internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
+internal class CustomTechprintSettingsPage : CTSettingsPage
 {
     private readonly List<string> _categoryTags;
 
@@ -55,16 +55,19 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
             return;
 
         //do project selection menu
-        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Select(project =>
-        {
-            if (ConfigurableTechprintsMod.IsProjectNameMalformed(project.defName))
-                return DisabledTechprintMenuItem(project);
+        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Where(project => project.knowledgeCategory != null) //don't process anomaly tech
+                                                               .Select(project =>
+                                                               {
+                                                                   //error handling for malformed research project names
+                                                                   if (ConfigurableTechprintsMod.IsProjectNameMalformed(project.defName))
+                                                                       return DisabledTechprintMenuItem(project);
 
-            if (project.RequiredAnalyzedThingCount > 0)
-                return StudiedThingMenuItem(project);
+                                                                   //it's mech tech
+                                                                   if (project.RequiredAnalyzedThingCount > 0)
+                                                                       return StudiedThingMenuItem(project);
 
-            return new FloatMenuOption(project.LabelCap, () => AddNewCustomEntry(project));
-        }).ToList()));
+                                                                   return new FloatMenuOption(project.LabelCap, () => AddNewCustomEntry(project));
+                                                               }).ToList()));
     }
 
     private FloatMenuOption StudiedThingMenuItem(ResearchProjectDef project)
@@ -73,6 +76,19 @@ internal class CustomTechprintSettingsPage : ConfigurableTechprintsSettingPage
         return new FloatMenuOption(project.LabelCap.Colorize(ColorLibrary.BabyBlue),
                                    () => AddNewCustomEntry(project),
                                    mouseoverGuiAction: rect => TooltipHandler.TipRegion(rect, "StudiableThing_Notice".Translate(project.defName, studiableThingNames)));
+    }
+
+    //unneeded for now but may be useful if I decide to allow 
+    private FloatMenuOption KnowledgeBasedMenuItem(ResearchProjectDef project)
+    {
+        FloatMenuOption option = new(project.LabelCap.Colorize(ColorLibrary.OliveGreen),
+                                     () => AddNewCustomEntry(project),
+                                     mouseoverGuiAction: rect => TooltipHandler.TipRegion(rect, "KnowledgeBasedResearch_Notice".Translate(project.defName)))
+        {
+            Disabled = true
+        };
+
+        return option;
     }
 
     private FloatMenuOption DisabledTechprintMenuItem(ResearchProjectDef project)

@@ -14,7 +14,7 @@ using Verse;
 
 namespace ConfigurableTechprints.SettingsPage;
 
-internal class GeneralTraderSettingsPage : ConfigurableTechprintsSettingPage
+internal class GeneralTraderSettingsPage : CTSettingsPage
 {
     private readonly List<TraderKindDef> _traderKindDefs;
 

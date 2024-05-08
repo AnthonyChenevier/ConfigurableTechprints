@@ -26,7 +26,7 @@ public static class DefGenerator_Patcher
     public static void GenerateImpliedDefs_PreResolve_Prefix()
     {
         ConfigurableTechprintsMod mod = ConfigurableTechprintsMod.Instance;
-        ConfigurableTechprintsSettingsData modSettings = mod.Settings;
+        CTModSettings modSettings = mod.Settings;
 
         //backing up original data so we can use it for recognizing default values and resetting changes to settings
         Log.Message("ConfigurableTechprintsMod :: Backing up pre-modification values...");
@@ -99,6 +99,7 @@ public static class DefGenerator_Patcher
         TechLevel highestFactionTechLevel = tradingFactions.Max(f => f.techLevel);
         Dictionary<TechLevel, List<string>> factionTagsByTechLevel = new()
         {
+            { TechLevel.Animal, new List<string>() },
             { TechLevel.Neolithic, new List<string>() },
             { TechLevel.Medieval, new List<string>() },
             { TechLevel.Industrial, new List<string>() },
@@ -140,7 +141,8 @@ public static class DefGenerator_Patcher
         }
 
         //filter all non-custom, non-native, non-studiableThing-having
-        List<ResearchProjectDef> projectsRequiringTechprints = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => ConfigurableTechprintsMod.CanHaveAutoTechprints(p) &&
+        List<ResearchProjectDef> projectsRequiringTechprints = DefDatabase<ResearchProjectDef>.AllDefs.Where(p => p.techLevel != TechLevel.Undefined &&
+                                                                                                                  ConfigurableTechprintsMod.CanHaveAutoTechprints(p) &&
                                                                                                                   !customTechprints.ContainsKey(p.defName) &&
                                                                                                                   modSettings.TechLevelsWithTechprints[p.techLevel]).ToList();
 

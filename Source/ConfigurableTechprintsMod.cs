@@ -52,7 +52,7 @@ public class ConfigurableTechprintsMod : Mod
     }
 
 
-    public ConfigurableTechprintsSettingsData Settings { get; }
+    public CTModSettings Settings { get; }
 
     //TODO:backups of default values for traders and techprints accessible by defname
     //used by settings pages for recognition and resetting of default values.
@@ -68,7 +68,7 @@ public class ConfigurableTechprintsMod : Mod
 
         Instance = this;
 
-        Settings = GetSettings<ConfigurableTechprintsSettingsData>();
+        Settings = GetSettings<CTModSettings>();
         Reports = new Dictionary<string, string>();
 
         //Harmony.DEBUG = true;
@@ -120,7 +120,7 @@ public class ConfigurableTechprintsMod : Mod
     public override string SettingsCategory() { return "ConfigurableTechprintsModName".Translate(); }
 
     //pass through to static class 
-    public override void DoSettingsWindowContents(Rect inRect) { ConfigurableTechprintsSettingsScreen.Draw(inRect); }
+    public override void DoSettingsWindowContents(Rect inRect) { CTSettingsScreen.Draw(inRect); }
     public static bool IsProjectNameMalformed(string name) { return new Regex("\\d").IsMatch(name.Substring(name.Length - 1)); }
     public static bool CanHaveAutoTechprints(ResearchProjectDef def) { return !def.HasModExtension<NativeTechprint_DefModExtension>() && def.RequiredAnalyzedThingCount == 0; }
 }

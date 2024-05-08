@@ -16,7 +16,7 @@ using Verse;
 
 namespace ConfigurableTechprints.SettingsPage;
 
-internal class CustomTraderSettingsPage : ConfigurableTechprintsSettingPage
+internal class CustomTraderSettingsPage : CTSettingsPage
 {
     protected override void DoPage(Listing_Standard list, Rect inRect)
     {

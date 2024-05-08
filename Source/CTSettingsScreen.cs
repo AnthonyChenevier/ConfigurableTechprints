@@ -14,9 +14,9 @@ using Verse;
 
 namespace ConfigurableTechprints;
 
-//use this class for stuff that requires defs to be loaded. like a settings page that uses translations
+//using this for stuff that requires defs to be loaded. like a settings page that uses translations
 [StaticConstructorOnStartup]
-public static class ConfigurableTechprintsSettingsScreen
+public static class CTSettingsScreen
 {
     private readonly static GeneralTechprintSettingsPage generalTechprintSettingsPage;
     private readonly static CustomTechprintSettingsPage customTechprintSettingsPage;
@@ -36,7 +36,7 @@ public static class ConfigurableTechprintsSettingsScreen
     //Settings window stuff
     private static bool _restartRequired = true; //try to make this dynamically react to changes from last saved settings, eventually
 
-    static ConfigurableTechprintsSettingsScreen()
+    static CTSettingsScreen()
     {
         _tabs = new List<TabRecord>
         {
