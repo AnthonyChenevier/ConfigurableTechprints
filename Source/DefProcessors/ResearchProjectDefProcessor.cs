@@ -43,7 +43,7 @@ public static class ResearchProjectDefProcessor
             return ErrorReport(projectDef.defName);
 
         int newTechprintCount = CalcTechprintCount(projectDef.baseCost, modSettings.TechprintPerResearchPoints);
-        float newProjectBaseCost = CalcBaseCost(projectDef.baseCost, newTechprintCount, modSettings.ResearchBaseCostMultiplier);
+        float newProjectBaseCost = modSettings.ModifyBaseCosts ? CalcBaseCost(projectDef.baseCost, newTechprintCount, modSettings.ResearchBaseCostMultiplier) : projectDef.baseCost;
         float newTechprintMarketValue = CalcTechprintMarketValue(projectDef.baseCost, newTechprintCount, modSettings.MarketPriceMultiplier);
         float newTechprintCommonality = CalcTechprintCommonality(modSettings.BaseCommonality);
         List<string> newHeldByFactionCategoryTags = factionCategoryTagsForTechLevel;
