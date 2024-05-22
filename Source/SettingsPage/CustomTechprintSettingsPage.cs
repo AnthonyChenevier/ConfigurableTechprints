@@ -55,7 +55,7 @@ internal class CustomTechprintSettingsPage : CTSettingsPage
             return;
 
         //do project selection menu
-        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Where(project => project.knowledgeCategory != null) //don't process anomaly tech
+        Find.WindowStack.Add(new FloatMenu(uncustomizedProjects.Where(project => project.knowledgeCategory == null) //don't process anomaly tech
                                                                .Select(project =>
                                                                {
                                                                    //error handling for malformed research project names
