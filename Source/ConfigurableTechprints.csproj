@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="CTSettingsScreen.cs" />
     <Compile Include="ClassExtension_BackCompatibility.cs" />
+    <Compile Include="HarmonyPatches\ResearchTab_Patcher.cs" />
     <Compile Include="SettingsPage\CustomTraderSettingsPage.cs" />
     <Compile Include="DataTypes\CountChanceExposable.cs" />
     <Compile Include="DataTypes\NativeTechprint_DefModExtension.cs" />
